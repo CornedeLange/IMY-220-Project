@@ -16,3 +16,5 @@ class AddSongToPlayList extends React.Component{
         );
     }
 }
+
+export default AddSongToPlayList;

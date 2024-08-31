@@ -1,21 +1,20 @@
 import React from "react";
 
-class PlaylistPreview extends React.Component{
-
+class SearchInput extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            playlist: null
+            search: null
         };
     }
 
     render(){
         return (
             <div>
-                Playlist Preview
+                SearchInput
             </div>
         );
     }
 }
 
-export default PlaylistPreview;
+export default SearchInput;

@@ -1,21 +1,20 @@
 import React from "react";
 
-class PlaylistPreview extends React.Component{
-
+class ListComments extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            playlist: null
+            comment: null
         };
     }
 
     render(){
         return (
             <div>
-                Playlist Preview
+                ListComments
             </div>
         );
     }
 }
 
-export default PlaylistPreview;
+export default ListComments;

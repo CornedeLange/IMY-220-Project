@@ -17,3 +17,5 @@ class ProfilePreview extends React.Component{
             );
         }
 }
+
+export default ProfilePreview ;

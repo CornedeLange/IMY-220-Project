@@ -1,21 +1,21 @@
 import React from "react";
 
-class PlaylistPreview extends React.Component{
-
+//SHOULD INCLUDE THE FORMS FOR LOGIN AND SIGNUP
+class Splash extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            playlist: null
+            song: null
         };
     }
 
     render(){
         return (
             <div>
-                Playlist Preview
+                Splash
             </div>
         );
     }
 }
 
-export default PlaylistPreview;
+export default Splash;

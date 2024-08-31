@@ -1,21 +1,20 @@
 import React from "react";
 
-class PlaylistPreview extends React.Component{
-
+class EditProfile extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            playlist: null
+            profile: null
         };
     }
 
     render(){
         return (
             <div>
-                Playlist Preview
+                EditProfile
             </div>
         );
     }
 }
 
-export default PlaylistPreview;
+export default EditProfile;
