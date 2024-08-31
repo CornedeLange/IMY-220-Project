@@ -1,12 +1,12 @@
 import React from "react";
 
 class Song extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            song: null
-        };
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         song: null
+    //     };
+    // }
 
     // componentDidMount() {
     //     fetch("/api/song")
@@ -16,8 +16,15 @@ class Song extends React.Component {
 
     render(){
         return (
-            <div>
-                Song
+            <div className="song">
+                <h3>{this.props.name}</h3>
+                <p>{this.props.author}</p>
+                <a href={this.props.link} target="_blank" rel="noopener noreferrer">
+                    {this.props.link}
+                </a>
+                <p>{this.props.dateAdded}</p>
+
+                {/* //<Song name="test" author="somebody" link="someLink" dateAdded="date" */}
             </div>
         );
     }
