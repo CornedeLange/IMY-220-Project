@@ -1,5 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import Logo from "../../public/assests/images/Logo.png"
+import "../styles/Navigation.css";
 
 class Navigation extends React.Component{
     // constructor(props){
@@ -8,26 +10,26 @@ class Navigation extends React.Component{
     //         song: null
     //     };
     // }
-
     render(){
         return (
-            <header>
-                {/* LOGO SHOULD GO HERE */}
-                {/* <img src="."/> */}
-                <img src="../public/images/Logo.png"></img>
-                <nav>
-                    <ul>
+            <header className="header" >
+                <img src={Logo} className="logo"/>
+                <nav >
+                    <ul className="nav-links">
                         <li>
                             <Link to="/">Home</Link>
                         </li>
                         <li>
-                            <Link to="/songs">Songs</Link>
+                            <Link to="/explore">Explore</Link>  
                         </li>
                         <li>
-                            <Link to="/playlists">Playlists</Link>
+                            <Link to="/playlist/:playlistId">Playlists</Link>
                         </li>
                         <li>
-                            <Link to="/profiles">Profiles</Link>
+                            <Link to="/profile/:userId">Profile</Link>
+                        </li>
+                        <li>
+                            <Link to="/splash">Splash</Link>
                         </li>
                     </ul>
                 </nav>

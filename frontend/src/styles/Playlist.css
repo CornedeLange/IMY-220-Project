@@ -1,0 +1,171 @@
+/* Playlist.css */
+
+.playlist-page-container {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+
+
+.playlist-page-container h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.playlist-page-container img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.playlist-page-container p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.playlist-page-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.playlist-page-container button {
+    background-color: #f79c35;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+.playlist-info-and-edit{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin-right: 20px;
+}
+
+.playlist-page-container button:hover {
+    background-color: #fcc35a;
+    color: black;
+}
+
+.playlist-page-comment-container {
+    margin-top: 20px;
+}
+
+.playlist-page-comment-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.playlist-page-comment-container div {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.playlist-page-comment-containe p {
+    margin: 5px 0;
+}
+
+.add-comment-form {
+    margin-top: 20px;
+}
+
+.add-comment-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.add-comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.add-comment-form button {
+    background-color: #f79c35;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.add-comment-form button:hover {
+    background-color: #fcc35a;
+    color: black;
+}
+
+.edit-playlist-form {
+    margin-top: 20px;
+}
+
+.edit-playlist-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.edit-playlist-form input,
+.edit-playlist-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.edit-playlist-form button {
+    background-color: #f79c35;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.edit-playlist-form button:hover {
+    background-color: #fcc35a;
+    color: black;
+}
+
+.basic-playlist-info{
+    display: flex;
+    flex-direction: row;
+}
+
+.playlist-image-and-info{
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    width: 100%;
+}
+
+.basic-playlist-buttons{
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-right: 40px;
+}

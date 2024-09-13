@@ -1,20 +1,13 @@
-import React from "react";
+import React from 'react';
+import "../styles/Playlist.css";
 
-class Comment extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            comment: null
-        };
-    }
-
-    render(){
-        return (
-            <div>
-                Comment
-            </div>
-        );
-    }
-}
+const Comment = ({ comment }) => {
+    return (
+        <div className="comment-text-author">
+            <p>{comment.text}</p>
+            <p>By: {comment.author}</p>
+        </div>
+    );
+};
 
 export default Comment;

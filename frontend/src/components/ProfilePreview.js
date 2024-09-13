@@ -1,15 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import "../styles/ProfilePreview.css";
 
 class ProfilePreview extends React.Component{
-    
-        // constructor(props){
-        //     super(props);
-        //     this.state = {
-        //         profile: null
-        //     };
-        // }
-    
         render(){
+            //ADD USER ID TO PROPS
             const { username, profilePicture, bio, numFollowers} = this.props;
             return (
                 <div className="profile-preview">
@@ -17,6 +12,8 @@ class ProfilePreview extends React.Component{
                     <h3>{username}</h3>
                     <p>{bio}</p>
                     <p>{numFollowers} followers</p>
+                    <Link to="/profile/:userId">Visit Profile</Link>
+                    {/* <Link to={`/profile/${userId}`}>Visit Profile</Link> */}
                 </div>
             );
         }

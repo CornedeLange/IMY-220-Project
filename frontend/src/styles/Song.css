@@ -1,0 +1,125 @@
+/* .song{
+    display: flex;
+    flex-direction: row;
+    padding: 0.001rem;
+    border-bottom: 1px solid #e1e1e1;
+    margin: 15px;
+    border-radius: 25px;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 0 10px #f79c35;
+
+}
+.song:hover{
+    transform: scale(1.01);
+}
+
+.name-artist {
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+    margin-right: 170px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px; 
+
+}
+
+.song-info a {
+    color: #f79c35;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.song-info a:hover {
+    color: #1a6fc5;
+}
+
+.delete-button{
+    background-color: #f79c35;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 50%;
+} */
+
+.song {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 0 10px #f79c35;
+}
+
+.song-details {
+    display: flex;
+    width: 100%;
+}
+
+.name-artist {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.name-artist h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.name-artist p {
+    margin: 5px 0 0;
+    color: #777;
+}
+
+.song-info {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Add space between link, date, and button */
+}
+
+.song-info a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.song-info a:hover {
+    text-decoration: underline;
+}
+
+.song-info p {
+    margin: 0;
+    color: #555;
+}
+
+/* Delete button styles */
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+/* Placeholder to reserve space for delete button */
+.delete-button-placeholder {
+    width: 90px;  /* Same width as delete button */
+    height: 30px;  /* Same height as delete button */
+    display: inline-block;
+}

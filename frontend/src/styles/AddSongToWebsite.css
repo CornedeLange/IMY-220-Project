@@ -1,0 +1,46 @@
+.add-song-to-website {
+    background-color: rgb(114, 114, 114);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid black;
+    max-width: 400px;
+    margin: 0 auto;
+    color: white;
+}
+
+.add-song-to-website label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.add-song-to-website input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.add-song-to-website button {
+    background-color: #f79c35;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.add-song-to-website button:hover {
+    background-color: #fcc35a;
+    color: black;
+}
+
+.error{
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
