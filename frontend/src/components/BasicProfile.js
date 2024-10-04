@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import EditProfile from "./EditProfile";
 import "../styles/BasicProfile.css";
 
-const BasicProfile = ({ username, profilePicture, bio, numFollowers, socials, age, toggleEditProfile, isFriend, onFriendToggle, currentUser }) => {
+const BasicProfile = ({ username, profilePicture, bio, numFollowers, socials, age, toggleEditProfile, isFriend, onFriendToggle, currentUser, userId }) => {
     const [editingProfile, setEditingProfile] = useState(false);
 
     const handleToggleEditProfile = () => {
@@ -10,7 +10,10 @@ const BasicProfile = ({ username, profilePicture, bio, numFollowers, socials, ag
         if (toggleEditProfile) toggleEditProfile(); //calls the function from parent
     };
 
-    const isCurrentUserProfile = username === currentUser;
+    //const isCurrentUserProfile = username === currentUser;
+    //const isCurrentUserProfile = true; // Hardcoded for now
+    const userIdFromLocalStorage = localStorage.getItem("userId");
+    const isCurrentUserProfile = userIdFromLocalStorage === userId;
 
     return (
         <div className="basic-profile-container">
@@ -21,19 +24,16 @@ const BasicProfile = ({ username, profilePicture, bio, numFollowers, socials, ag
                     <p>{bio}</p>
                     <p>{numFollowers} followers</p>
 
-                    {/* Conditional rendering for friend request and profile editing */}
-                    {isCurrentUserProfile && (
-                        <button onClick={onFriendToggle}>
-                            {isFriend ? "Remove Friend" : "Send Friend Request"}
-                        </button>
-                    )}
-
                         {/* USE THIS FOR DELIVERABLE 2 */}
-                    {/* {!isCurrentUserProfile && (
+                    {!isCurrentUserProfile && (
+                        //GO BACK TO THIS???/
+                        // <button onClick={onFriendToggle}>
+                        //     {isFriend ? "Remove Friend" : "Add Friend"}
+                        // </button>
                         <button onClick={onFriendToggle}>
-                            {isFriend ? "Remove Friend" : "Send Friend Request"}
-                        </button>
-                    )} */}
+                            {isFriend ? "Remove Friend" : "Add Friend"}
+                            </button>
+                    )}
 
                     {isCurrentUserProfile && (
                         <button onClick={handleToggleEditProfile}>
@@ -49,20 +49,9 @@ const BasicProfile = ({ username, profilePicture, bio, numFollowers, socials, ag
                     <p>Age: {age}</p>
                     <p>Bio: {bio}</p>
                     <p>Followers: {numFollowers}</p>
-                    <p>Socials: {socials}</p>
+                    {/* <p>Socials: {socials}</p> */}
                     
                 </div>
-                {/* <div className="friends-list">
-                    <h3>Friends</h3>
-                    <ul>
-                       
-                        <li>Friend 1</li>
-                        <li>Friend 2</li>
-                        <li>Friend 3</li>
-                        <li>Friend 4</li>
-                        <li>Friend 5</li>
-                    </ul>
-                </div> */}
             </aside>
         </div>
     );

@@ -5,12 +5,43 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
     const [name, setName] = useState(playlist.name);
     const [description, setDescription] = useState(playlist.description);
     const [coverImage, setCoverImage] = useState(playlist.coverImage);
+    const [genre, setGenre] = useState(playlist.genre);
+    //const [hashtags, setHashtags] = useState(playlist.hashtags ? playlist.hashtags.split(",") : []);
+    const [hashtags, setHashtags] = useState(Array.isArray(playlist.hashtags) ? playlist.hashtags : (playlist.hashtags || "").split(","));
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
+        //e.preventDefault();
         // Update playlist data here
-        onEditComplete();
+        //onEditComplete();
+
+
+        //ADDED
+        e.preventDefault();
+
+
+        const updatedPlaylist = { name, description, coverImage, genre,  hashtags: hashtags, };
+        try {
+        const response = await fetch(`/playlist/${playlist.playlistId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedPlaylist),
+        });
+        const data = await response.json();
+        if (data.success) {
+            onEditComplete();
+        } else {
+            console.error('Failed to update playlist');
+        }
+        } catch (error) {
+        console.error(error);
+        }
     };
+
+    const handleHashtagChange = (e) => {
+        const hashtagString = e.target.value;
+        const hashtagsArray = hashtagString.split(",").map((hashtag) => hashtag.trim());
+        setHashtags(hashtagsArray);
+      };
 
     return (
         <form onSubmit={handleSubmit} className="edit-playlist-form">
@@ -24,7 +55,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
             </label>
             <label>
                 Genre
-                <select>
+                {/* <select> */}
+                <select value={genre} onChange={(e) => setGenre(e.target.value)}>
                     <option value="rock">Rock</option>
                     <option value="pop">Pop</option>
                     <option value="hip-hop">Hip Hop</option>
@@ -39,7 +71,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
             </label>
             <label>
                 Hashtags:
-                <input type="text" />
+                {/* <input type="text" /> */}
+                <input type="text" value={hashtags.join(",")} onChange={handleHashtagChange} />
             </label>
             <button type="submit">Save</button>
         </form>

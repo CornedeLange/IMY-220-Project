@@ -9,6 +9,7 @@ import Playlist from "./pages/Playlist";
 // import AddSongToWebsite from "./components/AddSongToWebsite";
 import Explore from "./pages/Explore";
 
+//const userId = localStorage.getItem("userId");
 const router = createBrowserRouter([
     { path: "/", element: <Home/>},
     { path: "/profile/:userId",element: <Profile/>},
@@ -22,7 +23,6 @@ class App extends React.Component{
     render(){
         return (
             <RouterProvider router={router}>
-                {/* <Navigation /> */}
             </RouterProvider>
         );
     }

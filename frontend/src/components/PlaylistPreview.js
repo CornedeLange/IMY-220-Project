@@ -11,15 +11,26 @@ class PlaylistPreview extends React.Component{
     // }
 
     renderHashTags(){
-        return this.props.hashtags.map((tag, index)=>(
-            <span key={index} className="hashtag" onClick={() => this.props.onHashtagClick(tag)}>
-                    {tag}
+        // return this.props.hashtags.map((tag, index)=>(
+        //     <span key={index} className="hashtag" onClick={() => this.props.onHashtagClick(tag)}>
+        //             {tag}
+        //     </span>
+        // ));
+
+        const hashtags = Array.isArray(this.props.hashtags) 
+            ? this.props.hashtags 
+            : this.props.hashtags.split(",");
+
+        return hashtags.map((tag, index) => (
+            <span key={index} className="hashtag" onClick={() => this.props.onHashtagClick(tag.trim())}>
+            {tag.trim()}
             </span>
         ));
     }
 
     render(){
-        const { playlistName, description, numSongs, coverImage, hashtags } = this.props;
+        const { playlistName, description, numSongs, coverImage, hashtags, playlistId } = this.props;
+        //console.log(playlistId);
         return (
             <div className="playlist-preview">
                 
@@ -31,7 +42,8 @@ class PlaylistPreview extends React.Component{
                 <div className="hashtags">
                     {this.renderHashTags()}
                     </div>
-                <Link to="/playlist/:playlistId">View Playlist</Link>
+                {/* <Link to="/playlist/:playlistId">View Playlist</Link> */}
+                <Link to={`/playlist/${playlistId}`}>View Playlist</Link>
             </div>
         );
     }

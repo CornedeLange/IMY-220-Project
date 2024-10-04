@@ -8,9 +8,13 @@ class CreatePlaylist extends React.Component{
             playlistName: "",
             genre: "",
             description: "",
+            //coverImage: null,
             coverImage: "",
             hashtags: "",
-            songs: []
+            songs: [],
+            userId: localStorage.getItem("userId"),
+            successMessage: "",
+            errorMessage: "",
         };
     }
     handleInputChange = (event) => {
@@ -18,31 +22,109 @@ class CreatePlaylist extends React.Component{
         this.setState({ [name]: value });
     };
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
-        const { playlistName, genre, description, coverImage, hashtags, songs } = this.state;
-        console.log({
-            playlistName,
-            genre,
-            description,
-            coverImage,
-            hashtags: hashtags.split(",").map(tag => tag.trim()), // Convert hashtags to an array
-            // songs
+        const { playlistName, genre, description, coverImage, hashtags, userId } = this.state;
+        // console.log({
+        //     playlistName,
+        //     genre,
+        //     description,
+        //     coverImage,
+        //     hashtags: hashtags.split(",").map(tag => tag.trim()), // Convert hashtags to an array
+        //     // songs
+        //     userId,
 
-        });
-        // Clear form fields
-        this.setState({
-            playlistName: "",
-            genre: "",
-            description: "",
-            coverImage: "",
-            hashtags: "",
-            songs: []
-        });
+        // });
+        // const formData = new FormData();
+        // formData.append("playlistName", playlistName);
+        // formData.append("genre", genre);
+        // formData.append("description", description);
+        // formData.append("coverImage", coverImage);
+        // formData.append("hashtags", hashtags.split(",").map(tag => tag.trim()));
+        // formData.append("userId", userId);
+
+        try{
+            const response = await fetch('/createPlaylist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    playlistName,
+                    genre,
+                    description,
+                    coverImage,
+                    hashtags: hashtags.split(",").map(tag => tag.trim()), // Convert hashtags to an array
+                    // songs
+                    userId,
+                }),
+               // body: formData,
+            });
+
+            if(response.ok){
+                const data = await response.json();
+                if(data.message == "Playlist created successfully")
+                {
+                    console.log(data);
+                    this.setState({
+                        successMessage: "Playlist created successfully",
+                        errorMessage: "",
+                    });
+                    setTimeout(() => {
+                        this.setState({ successMessage: "" });
+                    }, 3000);
+        
+                    // Clear form fields
+                    this.setState({
+                        playlistName: "",
+                        genre: "",
+                        description: "",
+                        coverImage: "",
+                        hashtags: "",
+                        songs: [],
+                        userId: localStorage.getItem("userId"),
+        
+                    });
+                }
+                else{
+                    this.setState({
+                        successMessage: "",
+                        errorMessage: "Failed to create playlist, Please try again",
+                    });
+                    setTimeout(() => {
+                        this.setState({ errorMessage: "" });
+                    }, 3000);
+                }
+                
+            }
+            else{
+                const errorData = await response.json();
+                this.setState({
+                    successMessage: "",
+                    errorMessage: errorData.message || "Failed to create playlist, Please try again",
+                });
+                setTimeout(() => {
+                    this.setState({ errorMessage: "" });
+                }, 3000);
+            }
+
+        }
+        catch(error){
+            console.error(error);
+            this.setState({
+                successMessage: "",
+                errorMessage: "Failed to create playlist, Please try again",
+            });
+            setTimeout(() => {
+                this.setState({ errorMessage: "" });
+                }, 3000);
+        }
+
+        
     };
 
     render() {
-        const { playlistName, genre, description, coverImage, hashtags, songs } = this.state;
+        const { playlistName, genre, description, coverImage, hashtags, successMessage, errorMessage } = this.state;
         // Dummy genres for dropdown
         const genres = ["Pop", "Rock", "Hip Hop", "Jazz", "Metal", "Classical"];
 
@@ -111,6 +193,8 @@ class CreatePlaylist extends React.Component{
                     {/* TODO: Implement functionality to add songs to the playlist */}
 
                     <button type="submit">Create Playlist</button>
+                    {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+                    {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
                 </form>
             </div>
         );

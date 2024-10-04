@@ -8,13 +8,16 @@ class AddSongToWebsite extends React.Component{
             name: "",
             artist: "",
             link: "",
-            dateAdded: "",
+            //dateAdded: "",
             errors:{
                 name: "",
                 artist: "",
                 link: "",
                 // dateAdded: ""
-            }
+            },
+            addedBy: localStorage.getItem("userId"),
+            successMessage: "",
+            errorMessage: "",
         };
     }
     handleChange = (event) => {
@@ -41,37 +44,71 @@ class AddSongToWebsite extends React.Component{
 
     handleSubmit  = (event) => {
         event.preventDefault();
-        // const newSong = {
-        //     name: this.state.name,
-        //     artist: this.state.artist,
-        //     link: this.state.link,
-        //     dateAdded: this.state.dateAdded //remember automatic
 
-        // };
-        //console.log(newSong);
-        //logic to actually add song to website will be here
-        //clear form state values
-        // this.setState({name: "",artist: "",link: "",dateAdded: ""});
-
-        const { name, artist, link, errors } = this.state;
+        const { name, artist, link, errors, addedBy } = this.state;
         if (name && artist && link && !errors.name && !errors.artist && !errors.link) {
             const song = {
-                name: this.state.name,
-                artist: this.state.artist,
-                link: this.state.link,
-                dateAdded: new Date().toISOString()
+                name,
+                artist,
+                link,
+                addedBy
             };
-            console.log(song);
-            // Add song to website
-            // this.props.onAddSong(song);
-        } else {
+
+            try {
+                fetch("/addSongToWebsite", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(song),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.message === "Song added") {
+                          console.log("Song added successfully");
+                          this.setState({
+                            name: "",
+                            artist: "",
+                            link: "",
+                            successMessage: "Song added successfully!",
+                            errorMessage: "",
+                          });
+                          this.props.onAddSong(song);
+                          setTimeout(() => {
+                            this.setState({
+                              successMessage: "",
+                            });
+                          }, 3000); // Display the message for 3 seconds
+                        } else {
+                          this.setState({
+                            errorMessage: "Failed to add song. Please try again.",
+                          });
+                          setTimeout(() =>{
+                            this.setState({
+                              errorMessage: "",
+                            });
+                          }, 3000); // Display the message for 3 seconds)
+
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Failed to add song", error);
+                        this.setState({
+                          errorMessage: "Failed to add song. Please try again.",
+                        });
+                      });
+                }
+            catch (error) {
+                console.error("Error:", error);
+            }
+        }else {
             console.error("Invalid form");
         }
 
     };
 
     render(){
-        const { errors } = this.state;
+        const { errors, successMessage, errorMessage } = this.state;
         return (
             <form className="add-song-to-website" onSubmit={this.handleSubmit}>
                 
@@ -87,12 +124,9 @@ class AddSongToWebsite extends React.Component{
                     <input type="text" id="link" name="link" value={this.state.link} onChange={this.handleChange} required />
                     {errors.link && <span className="error">{errors.link}</span>}
                 
-                {/* date added should be automatic */}
-                {/* <div>
-                    <label htmlFor="dateAdded">Date Added:</label>
-                    <input type="date" id="dateAdded" name="dateAdded" value={this.state.dateAdded} onChange={this.handleChange} required />
-                </div> */}
-                <button type="submit">Add Song</button>
+                    <button type="submit">Add Song</button>
+                    {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+                    {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             </form>
         );
     }

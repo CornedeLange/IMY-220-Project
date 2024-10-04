@@ -1,16 +1,33 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import Logo from "../../public/assests/images/Logo.png"
 import "../styles/Navigation.css";
 
 class Navigation extends React.Component{
-    // constructor(props){
-    //     super(props);
-    //     this.state = {
-    //         song: null
-    //     };
-    // }
+    constructor(props){
+        super(props);
+        this.state = {
+            isLoggedIn : false
+        };
+    }
+
+    handleLogout = () => {
+        localStorage.clear();
+        this.setState({isLoggedIn: false});
+        //window.location.href = "/splash";
+        //this.props.history.push("/splash");
+        window.location.href = '/splash';
+    }
+
+    componentDidMount(){
+        const userId = localStorage.getItem("userId");
+        if(userId){
+            this.setState({isLoggedIn: true});
+        }
+    }
     render(){
+
+        const userId = localStorage.getItem("userId");
         return (
             <header className="header" >
                 <img src={Logo} className="logo"/>
@@ -22,14 +39,19 @@ class Navigation extends React.Component{
                         <li>
                             <Link to="/explore">Explore</Link>  
                         </li>
-                        <li>
+                        {/* <li>
                             <Link to="/playlist/:playlistId">Playlists</Link>
+                        </li> */}
+                        <li>
+                            <Link to={`/profile/${userId}`}>Profile</Link>
                         </li>
                         <li>
-                            <Link to="/profile/:userId">Profile</Link>
-                        </li>
-                        <li>
-                            <Link to="/splash">Splash</Link>
+                            {/* <Link to="/splash">Splash</Link> */}
+                            {this.state.isLoggedIn ? (
+                                    <button onClick={this.handleLogout}>Logout</button>
+                                ) : (
+                                    <Link to="/splash">Splash</Link>
+                                )}
                         </li>
                     </ul>
                 </nav>

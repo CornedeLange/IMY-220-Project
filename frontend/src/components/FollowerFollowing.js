@@ -6,7 +6,8 @@ class FollowerFollowing extends React.Component{
     render(){
         const {users, type} = this.props;
         // const title = type === "followers" ? "Followers" : "Following";
-        return(<div className="follower-following">
+        return(
+        <div className="follower-following">
             {/* <h2>{title}</h2> */}
             <div className="profile-list">
                 {users && users.length > 0 ? (
@@ -16,11 +17,12 @@ class FollowerFollowing extends React.Component{
                             username={user.username}
                             profilePicture={user.profilePicture}
                             bio={user.bio}
+                            userId={user.userId}
                             // Add other props as necessary
                         />
                     ))
                 ) : (
-                    <p>No {title} to display</p>
+                    <p>No to display</p>
                 )}
             </div>
         </div>

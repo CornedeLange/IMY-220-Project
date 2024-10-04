@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/Login.css";
 
 class Login extends React.Component{
@@ -50,6 +51,33 @@ class Login extends React.Component{
                 password: this.state.password
             };
             console.log(user);
+
+            try{
+                fetch("/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(user)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Login successful") {
+                        // Save userId to local storage
+                        localStorage.setItem("userId", data.userId);
+                        localStorage.setItem("username", data.username);
+                        // Redirect to dashboard page
+                         window.location.href = '/';
+                        //this.props.history.push("/");
+                    } else {
+                        console.error(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+            catch(error){
+                console.error("Error:", error);
+            }
         }
         else{
             console.error("Invalid form");

@@ -17,29 +17,11 @@ class Song extends React.Component {
 
     render(){
         // const spotifyEmbedLink = this.getSpotifyEmbedLink(this.props.link);
-        const { currentUser, addedBy, isAdmin } = this.props; // Destructuring props
+        const { currentUser, addedBy, isAdmin, onDelete } = this.props; // Destructuring props
+        const idFromLocalStorage = localStorage.getItem('userId');
+        const isAddedByUser = addedBy === idFromLocalStorage;
         return (
-            // <div className="song" >
-            //     <div className="name-artist">
-            //         <h3>{this.props.name}</h3>
-            //         <p>{this.props.artist}</p>
-            //     </div>
-                
-            //     <div className="song-info">
-            //     {/* {spotifyEmbedLink ? (
-            //             <iframe src={spotifyEmbedLink} width="300" height="80" frameBorder="0"  allow="encrypted-media" title="Spotify Player" />) : (
-            //             <p>Invalid Spotify link</p>
-            //         )}
-            //         <p>Added on: {this.props.dateAdded}</p> */}
-            //         <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-            //             {this.props.link}
-            //         </a>
-            //         <p>{this.props.dateAdded}</p>
-            //         {(currentUser === addedBy || isAdmin) && (
-            //         <button onClick={this.props.onDelete} className="delete-button">Delete Song</button>
-            //     )}
-            //     </div>
-            // </div>
+            
 
             <div className="song">
                 <div className="song-details">
@@ -49,13 +31,13 @@ class Song extends React.Component {
                     </div>
                     
                     <div className="song-info">
-                        <a href={this.props.link} target="_blank" rel="noopener noreferrer">
+                        <a href={this.props.link} target="_blank" rel="noopener noreferrer" className="song-link">
                             {this.props.link}
                         </a>
                         <p>{this.props.dateAdded}</p>
 
-                        {currentUser === addedBy || isAdmin ? (
-                            <button onClick={this.props.onDelete} className="delete-button">
+                        {((currentUser === addedBy) && onDelete) || isAdmin ? (
+                            <button onClick={onDelete} className="delete-button">
                                 Delete Song
                             </button>
                         ) : (

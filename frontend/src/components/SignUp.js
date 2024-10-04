@@ -12,13 +12,13 @@ class SignUp extends React.Component{
                 username: "",
                 password: "",
                 email: ""
-            }
+            }  
         };
         //bind methods
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+    
     handleChange = (event) => {
         // this.setState({
         //     [event.target.name]: event.target.value
@@ -64,6 +64,28 @@ class SignUp extends React.Component{
                 email: this.state.email
             };
             console.log(user);
+
+            try{
+                fetch("/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(user)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data === "User registered") {
+                        // Redirect to login page
+                        window.location.href = '/splash';
+                    } else {
+                        console.error(data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } catch (error) {
+                console.error("Error", error);
+            }
         } else {
             console.log("Form has errors.");
         }

@@ -78,7 +78,7 @@
 }
 
 .explore-songs-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
 }
 
 .explore-section h2 {
@@ -90,4 +90,15 @@
 .explore-grid > div:hover {
     transform: scale(1.02);
     transition: transform 0.2s ease-in-out;
+}
+
+.no-songs-playlist-profile{
+  /* p tag display no results message */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 20px;
+  color: #ff6e6e;
+    
 }

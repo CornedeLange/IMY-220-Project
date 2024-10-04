@@ -113,6 +113,17 @@
     border-radius: 4px;
 }
 
+.song-link{
+    max-width: 225px;
+}
+
+/* scroll for link */
+.song-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .delete-button:hover {
     background-color: darkred;
 }

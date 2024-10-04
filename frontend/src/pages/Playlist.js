@@ -11,33 +11,48 @@ const Playlist = () => {
     const { playlistId } = useParams(); // Get playlist ID from URL
     const [playlist, setPlaylist] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [owner, setOwner] = useState(null);
+    const userId = localStorage.getItem("userId");
+    const isOwner = userId === owner;
 
     useEffect(() => {
-        // Fetch playlist data based on playlistId
-        const fetchPlaylistData = async () => {
-            // Replace with actual data fetching
-            const fetchedPlaylist = {
-                id: playlistId,
-                name: "Playlist Name",
-                description: "Playlist Description",
-                coverImage: "https://via.placeholder.com/150",
-                hashtags: ["#rock", "#summer"],
-                numSongs: 2,
-                songs: [
-                    { id: 1, name: "Song 1", artist: "Artist 1", link: "https://link1" },
-                    { id: 2, name: "Song 2", artist: "Artist 2", link: "https://link2" }
-            //         {songName: "Song name 1", artist: "Artist1", link: "https://link1",dateAdded: "2024/01/01", addedBy:"user123"},
-            // {songName: "Song name 2", artist: "Artist2", link: "https://link2",dateAdded: "2024/01/01", addedBy:"user456"},
-
-                ]
+        const fetchPlaylist = async () =>{
+            try{
+                
+                    const response = await fetch(`/api/playlist/${playlistId}`);
+                    const data = await response.json();
+                    console.log(data);
+                    setPlaylist(data.playlist);
+                    console.log("OWNER: ", data.user.userId);
+                    setComments(data.playlist.comments);
+                    setOwner(data.user.userId);
+                }catch(error){
+                    console.error(error);
+                }
             };
-            setPlaylist(fetchedPlaylist);
-        };
-        fetchPlaylistData();
+           // setPlaylist(fetchedPlaylist);
+           fetchPlaylist();
     }, [playlistId]);
 
     const handleEditToggle = () => {
         setIsEditing(!isEditing);
+    };
+
+    const handleDeletePlaylist = async () => {
+        try {
+            const response = await fetch(`/playlist/${playlistId}`, {
+                method: 'DELETE',
+            });
+            const data = await response.json();
+            if (data.success) {
+                // Redirect to homepage or display a success message
+            } else {
+                console.error('Failed to delete playlist');
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -49,16 +64,30 @@ const Playlist = () => {
                 <div className="playlist-page-container">
                     {playlist && (
                         <>
-                            <div className="playlist-info-and-edit">
-                                <BasicPlaylist playlist={playlist} />
-                                <button onClick={handleEditToggle}>
-                                    {isEditing ? 'Cancel Editing' : 'Edit Playlist'}
-                                </button>
-                            </div>
+                            {isOwner ? (
+                                <div className="playlist-info-and-edit">
+                                    <BasicPlaylist playlist={playlist} owner={owner} />
+                                    <button onClick={handleEditToggle}>
+                                        {isEditing ? 'Cancel Editing' : 'Edit Playlist'}
+                                    </button>
+                                    <button onClick={handleDeletePlaylist}>
+                                        Delete Playlist
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="playlist-info">
+                                    <BasicPlaylist playlist={playlist} owner={owner} />
+                                </div>
+                            )}
                             
                             <div className="playlist-page-comment-container">
-                                <ListComments playlistId={playlistId} />
-                                <AddComment playlistId={playlistId} />
+                                <ListComments playlistId={playlistId} comments={comments}
+                                onCommentAdded={(newComment) => {
+                                    setComments((prevComments) => [...prevComments, newComment]);
+                                  }}/>
+                                <AddComment playlistId={playlistId} onCommentAdded={(newComment) => {
+                                    setComments((prevComments) => [...prevComments, newComment]);
+                                    }}/>
                             </div>
                             
                         </>
