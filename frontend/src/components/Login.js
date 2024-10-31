@@ -82,13 +82,6 @@ class Login extends React.Component{
         else{
             console.error("Invalid form");
         }
-
-
-        // const user = {
-        //     username: this.state.username,
-        //     password: this.state.password
-        // };
-        // console.log(user);
     }
 
     render(){

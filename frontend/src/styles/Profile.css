@@ -108,10 +108,15 @@
     flex-direction: column;
     background-color: #f9f9f9;
     padding: 20px;
+    top: 0;
+    /* position: absolute; */
+
 }
 
 .create-playlist-button {
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-right: 30px;
+    margin-bottom: 10px;
     text-align: right;
 }
 
@@ -134,10 +139,11 @@
 /* Profile info and follower-following should each take half the width */
 .profile-info {
     width: 48%;
-    padding: 10px;
+    /* padding: 10px; */
     border: 1px solid #ccc;
     border-radius: 10px;
-    background-color: #777777;
+    /* background-color: #777777; */
+    background-color: #f79c35;
 }
 
 .follower-following-container {
@@ -158,18 +164,18 @@
     padding: 20px;
 }
 
-.users-playlist, .users-songs {
+.users-playlist, .users-songs, .users-saved-playlists {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 /* Make sure the playlists take the entire width of the container */
-.users-playlist {
+/* .users-playlist {
     width: 100%;
     padding: 15px;
-}
+} */
 
 .users-songs {
     width: 100%;

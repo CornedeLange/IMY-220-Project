@@ -25,7 +25,7 @@ const Playlist = () => {
                     console.log(data);
                     setPlaylist(data.playlist);
                     console.log("OWNER: ", data.user.userId);
-                    setComments(data.playlist.comments);
+                    //setComments(data.playlist.comments);
                     setOwner(data.user.userId);
                 }catch(error){
                     console.error(error);
@@ -35,8 +35,25 @@ const Playlist = () => {
            fetchPlaylist();
     }, [playlistId]);
 
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            try{
+                const response = await fetch(`/api/comments/${playlistId}`);
+                const data = await response.json();
+                setComments(data);
+            }
+            catch(error){
+                console.error(error);
+            }
+        };
+        fetchComments();
+    },[playlistId]);
+
     const handleEditToggle = () => {
         setIsEditing(!isEditing);
+        // fetchPlaylist();
+        this.fetchPlaylist();
     };
 
     const handleDeletePlaylist = async () => {

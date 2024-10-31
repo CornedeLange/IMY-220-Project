@@ -42,8 +42,10 @@
     color: #f79c35;
     padding: 10px 15px; /* Add padding for better click area */
     transition: background-color 0.3s;
+    border-radius: 5px; /* Add rounded corners */
 }
 
 .nav-links a:hover {
-    background-color: #e9ecef; /* Add hover effect */
+     /* background-color: #e9ecef;  */
+     background-color: #ffe1c0; /* Orange theme */
 }

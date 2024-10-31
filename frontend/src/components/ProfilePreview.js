@@ -10,10 +10,10 @@ class ProfilePreview extends React.Component{
                 <div className="profile-preview">
                     <img src={profilePicture} alt={`${username}'s profile`} className="profile-picture" />
                     <h3>{username}</h3>
-                    <p>{bio}</p>
-                    <p>{numFollowers} followers</p>
+                    <p><i>{bio}</i></p>
+                    {/* <p>{numFollowers} followers</p> */}
                     {/* <Link to="/profile/:userId">Visit Profile</Link> */}
-                    <Link to={`/profile/${userId}`}>Visit Profile</Link>
+                    <Link to={`/profile/${userId}`} style={{color:'blue', textDecoration: 'none'}}>Visit Profile</Link>
                 </div>
             );
         }

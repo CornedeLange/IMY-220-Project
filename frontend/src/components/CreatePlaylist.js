@@ -9,7 +9,8 @@ class CreatePlaylist extends React.Component{
             genre: "",
             description: "",
             //coverImage: null,
-            coverImage: "",
+            // coverImage: "",
+            coverImage: null,
             hashtags: "",
             songs: [],
             userId: localStorage.getItem("userId"),
@@ -20,6 +21,10 @@ class CreatePlaylist extends React.Component{
     handleInputChange = (event) => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
+    };
+
+    handleFileChange = (event) => {
+        this.setState({ coverImage: event.target.files[0] });
     };
 
     handleSubmit = async (event) => {
@@ -35,30 +40,31 @@ class CreatePlaylist extends React.Component{
         //     userId,
 
         // });
-        // const formData = new FormData();
-        // formData.append("playlistName", playlistName);
-        // formData.append("genre", genre);
-        // formData.append("description", description);
-        // formData.append("coverImage", coverImage);
-        // formData.append("hashtags", hashtags.split(",").map(tag => tag.trim()));
-        // formData.append("userId", userId);
+        const formData = new FormData();
+        formData.append("playlistName", playlistName);
+        formData.append("genre", genre);
+        formData.append("description", description);
+        formData.append("coverImage", coverImage);
+        formData.append("hashtags", hashtags.split(",").map(tag => tag.trim()));
+        formData.append("userId", userId);
 
         try{
             const response = await fetch('/createPlaylist', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    playlistName,
-                    genre,
-                    description,
-                    coverImage,
-                    hashtags: hashtags.split(",").map(tag => tag.trim()), // Convert hashtags to an array
-                    // songs
-                    userId,
-                }),
+                // headers: {
+                //     'Content-Type': 'application/json',
+                // },
+                // body: JSON.stringify({
+                //     playlistName,
+                //     genre,
+                //     description,
+                //     coverImage,
+                //     hashtags: hashtags.split(",").map(tag => tag.trim()), // Convert hashtags to an array
+                //     // songs
+                //     userId,
+                // }),
                // body: formData,
+                body: formData,
             });
 
             if(response.ok){
@@ -79,7 +85,8 @@ class CreatePlaylist extends React.Component{
                         playlistName: "",
                         genre: "",
                         description: "",
-                        coverImage: "",
+                        // coverImage: "",
+                        coverImage: null,
                         hashtags: "",
                         songs: [],
                         userId: localStorage.getItem("userId"),
@@ -169,11 +176,11 @@ class CreatePlaylist extends React.Component{
                         type="file"
                         id="coverImage"
                         name="coverImage"
-                        value={coverImage}
-                        onChange={this.handleInputChange}
+                        // value={coverImage}
+                        onChange={this.handleFileChange}
                     />
 
-                    <label htmlFor="hashtags">Hashtags (comma separated)</label>
+                    <label htmlFor="hashtags">Hashtags (comma separated, e.g. #pop)</label>
                     <input
                         type="text"
                         id="hashtags"

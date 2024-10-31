@@ -123,6 +123,13 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(247, 156, 53, 0.2); /* Subtle orange shadow */
   transition: box-shadow 0.3s ease-in-out;
+  /* gap: 100px; */
+}
+
+.song-feed{
+  max-height: 750px;
+  overflow-y: auto;
+
 }
 
 .song-feed:hover, .playlist-feed:hover {

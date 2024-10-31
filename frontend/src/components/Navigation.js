@@ -30,7 +30,7 @@ class Navigation extends React.Component{
         const userId = localStorage.getItem("userId");
         return (
             <header className="header" >
-                <img src={Logo} className="logo"/>
+               <Link to="/"> <img src={Logo} className="logo"/> </Link>
                 <nav >
                     <ul className="nav-links">
                         <li>

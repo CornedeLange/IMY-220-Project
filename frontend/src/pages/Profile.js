@@ -14,6 +14,7 @@ const Profile = () => {
     const { userId } = useParams();
     const currentUserId = localStorage.getItem("userId");
     const [profile, setProfile] = useState(null);
+    const [mutualFriends, setMutualFriends] = useState([]);
     const [showCreatePlaylistForm, setShowCreatePlaylistForm] = useState(false);
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [isFriend, setIsFriend] = useState(false);
@@ -24,6 +25,7 @@ const Profile = () => {
     const [playlist, setPlaylist] = useState([]);
     const[song, setSong] = useState([]);
     const [songs, setSongs] = useState([]);
+    const [savedPlaylists, setSavedPlaylists] = useState([]);
 
     useEffect(() => {
       const fetchProfileData = async () => {
@@ -32,12 +34,17 @@ const Profile = () => {
           const data = await response.json();
           console.log(data);
           setProfile(data);
+
+          //ADDED
+          setIsFriend(data.friends.includes(currentUserId));
+          //ADDED
         } catch (error) {
           console.error(error);
         }
       };
       fetchProfileData();
-    }, [userId]);
+    // }, [userId]);
+    }, [userId, currentUserId]);
 
     useEffect(() => {
       const fetchPlaylists = async () => {
@@ -70,6 +77,7 @@ const Profile = () => {
       fetchSongs();
     }, [userId]);
 
+    //FETCH FOLLOWERS 
     useEffect(() => {
       const fetchFollowers = async () => {
         try {
@@ -87,31 +95,6 @@ const Profile = () => {
       fetchFollowers();
     }, [userId]);
 
-    // useEffect(() => {
-    //   const fetchFollowing = async () => {
-    //     try {
-    //       const response = await fetch(`/profile/${userId}/following`);
-    //       const data = await response.json();
-    //       setFollowingData(data);
-    //     } catch (error) {
-    //       console.error(error);
-    //     }
-    //   };
-    //   fetchFollowing();
-    // }, [userId]);
-
-  // useEffect(() => {
-  //   const fetchPlaylistComments = async () =>{
-  //     try{
-  //       const response = await fetch(`/playlist/${playlistId}/comments`);
-  //       const data = await response.json();
-  //       setComments(data);
-  //     }catch(error){
-  //       console.error(error);
-  //     }
-  //   }
-  // })
-
     const handleCreatePlaylistToggle = () => {
         setShowCreatePlaylistForm(!showCreatePlaylistForm);
     };
@@ -122,55 +105,69 @@ const Profile = () => {
 
 
     const handleFriendToggle = async () => {
-        try {
-          const response = await fetch(`/profile/${userId}/follow`, {
+        // try {
+        //   const response = await fetch(`/profile/${userId}/follow`, {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({ followerId: "currentUserId" }),
+        //   });
+        //   const data = await response.json();
+        //   console.log(data);
+        //   setIsFriend(!isFriend);
+        // } catch (error) {
+        //   console.error(error);
+        // }
+
+        try{
+          const action = isFriend ? "removeFriend" : "addFriend";
+          const response = await fetch(`/${action}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ followerId: "currentUserId" }),
+            body: JSON.stringify({userId: currentUserId, friendId: userId}),
           });
+
           const data = await response.json();
-          console.log(data);
-          setIsFriend(!isFriend);
-        } catch (error) {
+          if(response.ok){
+            setIsFriend(!isFriend);
+          }else{
+            console.error(data.message);
+          }
+        }
+        catch(error){
           console.error(error);
         }
       };
 
-      const handleUnfriend = async () => {
-        try {
-          const response = await fetch(`/profile/${userId}/unfollow`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ followerId: "currentUserId" }),
-          });
-          const data = await response.json();
-          console.log(data);
-          setIsFriend(!isFriend);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-    
-    // const updateProfile = (updatedProfile) => {
-    //     setProfile((prefProfile) => ({...prefProfile, ...updatedProfile}));
-    //     // setIsEditingProfile(false);
-    //     setIsEditingProfile(!isEditingProfile);
-    // }
     const updateProfile = async (updatedProfile) => {
         try {
           const response = await fetch(`/profile/${userId}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedProfile),
+            body: updatedProfile,
           });
           const data = await response.json();
           console.log(data);
           setProfile((prevProfile) => ({ ...prevProfile, ...updatedProfile }));
           setIsEditingProfile(false);
+          fetchProfileData();
         } catch (error) {
-          console.error(error);
+          console.error("Update profile error: ", error);
         }
       };
+
+      useEffect(() => {
+        const fetchSvedPlaylists = async () => {
+          try{
+            const response = await fetch(`/api/users/saved-playlists-info?userId=${currentUserId}`);
+            const data = await response.json();
+            setSavedPlaylists(data);
+
+          }
+          catch(error){
+            console.error(error);
+          }
+        };
+        fetchSvedPlaylists();
+      }, [userId]);
     
     return (
             <div>
@@ -184,7 +181,7 @@ const Profile = () => {
                           <button onClick={handleCreatePlaylistToggle}>
                             {showCreatePlaylistForm ? "Hide Create Playlist" : "Create Playlist"}
                           </button>
-  )}
+                      )}
                     </div>
         
           {/* Conditionally render CreatePlaylist or the rest of the profile content */}
@@ -201,12 +198,14 @@ const Profile = () => {
                               bio={profile?.bio}
                               email={profile?.email}
                               numFollowers={profile?.numFollowers}
+                              numFriends={followersData.length} 
                               //socials={profile?.socials}
                               age={profile?.age}
                               toggleEditProfile={handleEditProfileToggle}
                               isFriend={isFriend}
-                              handleFriendToggle={handleFriendToggle}
-                              handleUnfriend={handleUnfriend}
+                              // handleFriendToggle={handleFriendToggle}
+                              // handleUnfriend={handleUnfriend}
+                              onFriendToggle={handleFriendToggle}
                               userId={userId}
                               />
                           ) : (
@@ -215,6 +214,7 @@ const Profile = () => {
                                   profilePicture={profile.profilePicture}
                                   bio={profile.bio}
                                   email={profile.email}
+                                  age={profile.age}
                                   updateProfile={updateProfile}
                                   toggleEditProfile={handleEditProfileToggle}
                               />
@@ -222,12 +222,16 @@ const Profile = () => {
                           )}
                       </div>
 
+                      {(isFriend || currentUserId === userId) && (
+
+                          
+
                       <div className="follower-following-container">
-                          <div className="follower-following-toggle">
+                          {/* <div className="follower-following-toggle">
                               <button onClick={() => setShowFollowers(true)}>Followers</button>
                               <button onClick={() => setShowFollowers(false)}>Following</button>
-                          </div>
-                          {showFollowers ? (
+                          </div> */}
+                          {/* {showFollowers ? (
                               <div className="followers-container">
                                   <h2>Your Followers</h2>
                                   <FollowerFollowing users={followersData} type="followers" />
@@ -237,13 +241,24 @@ const Profile = () => {
                                   <h2>People you are Following</h2>
                                   <FollowerFollowing users={followingData} type="following" />
                               </div>
-                          )}
+                          )} */}
+
+                          <div className="followers-container">
+                            <h2>Your Friends</h2>
+                            <FollowerFollowing users={followersData} type="followers" />
+                            </div>
                       </div>
+                       )}
                   </div>
 
+                      {(isFriend || currentUserId === userId) && (
+
+                     
+
                   <div className="song-playlist-container">
+                    <h2>My Playlists</h2><br/>
                       <div className="users-playlist">
-                          <h2>My Playlists</h2>
+                          {/* <h2>My Playlists</h2><br/> */}
                           {playlist.map((playlist, index) => (
                               <PlaylistPreview
                                   key={index}
@@ -257,8 +272,8 @@ const Profile = () => {
                               />
                           ))}
                       </div>
-                      <div className="users-songs">
-                          <h2>My Songs</h2>
+                      {/* <div className="users-songs">
+                          <h2>My Songs</h2><br/>
                           {song.map((song, index) => (
                               <Song
                                   key={index}
@@ -269,8 +284,29 @@ const Profile = () => {
                                   addedBy={song.addedBy}
                               />
                           ))}
-                      </div>
+                      </div> */}
+
+                      {/* USERS SAVED PLAYLIST */}
+                      <h2>Saved Playlists</h2>
+                      {savedPlaylists && savedPlaylists.length > 0 && (
+                        <div className="users-saved-playlists">
+                            {/* <h2>Saved Playlists</h2> */}
+                            {savedPlaylists.map((playlist, index) => (
+                                <PlaylistPreview
+                                    key={index}
+                                    playlistName={playlist.name}
+                                    description={playlist.description}
+                                    numSongs={playlist.numSongs}
+                                    coverImage={playlist.coverImage}
+                                    hashtags={playlist.hashtags}
+                                    playlistId={playlist.playlistId}
+                                    onHashtagClick={() => {}}
+                                />
+                            ))}
+                        </div>
+                      )}
                   </div>
+                   )}
               </div>
           )}
           </div>

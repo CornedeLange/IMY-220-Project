@@ -19,6 +19,10 @@ class AddSongToWebsite extends React.Component{
             successMessage: "",
             errorMessage: "",
         };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.isValidSpotifyUrl = this.isValidSpotifyUrl.bind(this);
     }
     handleChange = (event) => {
         // this.setState({ [event.target.name]: event.target.value });
@@ -33,7 +37,14 @@ class AddSongToWebsite extends React.Component{
                 errors.artist = value.length === 0 ? "Artist name cannot be empty" : "";
                 break;
             case "link":
-                errors.link = value.length === 0 ? "Link cannot be empty" : "";
+                // errors.link = value.length === 0 ? "Link cannot be empty" : "";
+                if(value.length === 0){
+                    errors.link = "Link cannot be empty";
+                }else if(!this.isValidSpotifyUrl(value)){
+                    errors.link = "Invalid Spotify URL";
+                }else{
+                    errors.link = "";
+                }
                 break;
             default:
                 break;
@@ -106,6 +117,11 @@ class AddSongToWebsite extends React.Component{
         }
 
     };
+
+    isValidSpotifyUrl = (url) => {
+      const regex = /(?:track\/|spotify:track:)([a-zA-Z0-9]+)/;
+      return regex.test(url);
+    }
 
     render(){
         const { errors, successMessage, errorMessage } = this.state;

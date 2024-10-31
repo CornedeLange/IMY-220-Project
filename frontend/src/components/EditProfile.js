@@ -11,13 +11,21 @@ const EditProfile = ({ username: initialUsername, email: initialEmail, bio: init
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const updatedProfile = {username,password,email,bio,profilePicture, age};
-        updateProfile(updatedProfile);
+        //const updatedProfile = {username,password,email,bio,profilePicture, age};
+
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('email', email);
+        formData.append('bio', bio);
+        formData.append('profilePicture', profilePicture); // File
+        formData.append('age', age);
+
+        //updateProfile(updatedProfile);
+        updateProfile(formData);
         toggleEditProfile();
 
     };
-
-    
 
     return (
         <div className="edit-profile-container">
@@ -31,8 +39,16 @@ const EditProfile = ({ username: initialUsername, email: initialEmail, bio: init
                 <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <label htmlFor="bio">Bio:</label>
                 <input type="text" id="bio" name="bio" value={bio} onChange={(e) => setBio(e.target.value)} />
-                <label htmlFor="profilePicture">Profile Picture URL:</label>
-                <input type="text" id="profilePicture" name="profilePicture" value={profilePicture} onChange={(e) => setProfilePicture(e.target.value)} />
+                {/* <label htmlFor="profilePicture">Profile Picture URL:</label>
+                <input type="text" id="profilePicture" name="profilePicture" value={profilePicture} onChange={(e) => setProfilePicture(e.target.value)} /> */}
+                <label htmlFor="profilePicture">Profile Picture:</label>
+                <input 
+                type="file" 
+                id="profilePicture" 
+                name="profilePicture" 
+                onChange={(e) => setProfilePicture(e.target.files[0])} 
+                />
+
                 <label htmlFor="age">Age:</label>
                 <input type="number" id="age" name="age" value={age} onChange={(e) => setAge(e.target.value)} />
                 <button type="submit">Update Profile</button>

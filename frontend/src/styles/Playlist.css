@@ -3,13 +3,17 @@
 .playlist-page-container {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 90%;
+    /* width: 100%; */
     margin: 0 auto;
+    /* margin: auto; */
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
+    /* flex: 1; */
+    /* justify-content: space-evenly; */
+    /* justify-content: space-between; */
 }
 
 
@@ -21,14 +25,14 @@
 
 .playlist-page-container img {
     width: 100%;
-    max-width: 300px;
+    max-width: 500px;
     border-radius: 10px;
     margin-bottom: 20px;
 }
 
 .playlist-page-container p {
     font-size: 1.2em;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .playlist-page-container h2 {
@@ -40,18 +44,27 @@
     background-color: #f79c35;
     color: white;
     border: none;
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+}
+
+.playlist-info-and-songs{
+    width: 100%;
+    /* flex: 1; */
+}
+.playlist-info{
+    flex: 2;
+    margin-right: 100px;
 }
 
 .playlist-info-and-edit{
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 70%;
     margin-right: 20px;
 }
 
@@ -62,6 +75,15 @@
 
 .playlist-page-comment-container {
     margin-top: 20px;
+    /* width: 20%; */
+    flex: 1;
+    
+
+}
+
+.comment-container{
+    max-height: 625px;
+    overflow-y: auto;
 }
 
 .playlist-page-comment-container h2 {
@@ -75,6 +97,10 @@
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
+    /* width: 80%; */
+    
+    
+   
 }
 
 .playlist-page-comment-containe p {
@@ -115,6 +141,10 @@
     color: black;
 }
 
+.comment-text-author{
+    padding: 5px;
+}
+
 .edit-playlist-form {
     margin-top: 20px;
 }
@@ -153,21 +183,29 @@
 .basic-playlist-info{
     display: flex;
     flex-direction: row;
+    /* justify-content: space-between; */
+    /* flex: auto; */
+    /* make two child divs display closer to eachother */
+    /* margin-right: 20px; */
+    /* align-items: start; */
 }
 
 .playlist-image-and-info{
     display: flex;
     flex-direction: column;
-    margin-right: 20px;
-    width: 100%;
+    margin-right: 5px;
+    /* width: 100%; */
+    flex: 2;
 }
 
 .basic-playlist-buttons{
-    margin-top: 100px;
+    margin-top: 70px;
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
-    margin-right: 40px;
+    /* margin-left: 20px; */
+    margin-right: 20px;
+    /* width: fit-content; */
+    flex: 1;
 }
 
 .hashtags-playlist{

@@ -19,7 +19,13 @@ class SearchInput extends React.Component{
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.onSearch(this.state.searchTerm);
+        const searchTerm = this.state.searchTerm;
+        if(searchTerm.startsWith("#")){
+            this.props.onHashtagSearch(searchTerm.substring(1));
+        }
+        else{
+            this.props.onSearch(searchTerm);
+        }
     }
 
     render(){

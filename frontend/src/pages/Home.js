@@ -21,12 +21,19 @@ class Home extends React.Component{
         });
     }
 
+    //if userId not in localstorage redirect to splash page
+    componentDidMount(){
+        if(!localStorage.getItem("userId")){
+            this.props.history.push("/splash");
+        }
+    }
+
     render(){
         return (
             <div>
                 {/* Home */}
                 <Navigation/>
-                <SearchInput onSearch={this.handleSearch}/>
+                {/* <SearchInput onSearch={this.handleSearch}/> */}
                 <Feed searchTerm={this.state.searchTerm}/>
             </div>
         );

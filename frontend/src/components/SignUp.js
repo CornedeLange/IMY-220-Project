@@ -77,7 +77,8 @@ class SignUp extends React.Component{
                 .then(data => {
                     if (data === "User registered") {
                         // Redirect to login page
-                        window.location.href = '/splash';
+                        // window.location.href = '/splash';
+                        this.props.onSignupComplete();
                     } else {
                         console.error(data);
                     }
@@ -108,6 +109,7 @@ class SignUp extends React.Component{
                     <input type="email" id="email" name="email" value={this.state.email} onChange={this.handleChange} />
                     {errors.email && <span className="error">{errors.email}</span>}
                     <button type="submit" onClick={this.handleSubmit}>Sign Up</button>
+                    <p style={{color: 'blue', fontWeight: 'bold', marginTop: '10px'}}>Note: Please login in after signing up!</p>
                 </form>
             </div>
 

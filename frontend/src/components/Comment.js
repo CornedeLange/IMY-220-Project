@@ -16,7 +16,8 @@ class Comment extends React.Component {
         return (
             <div className="comment-text-author">
                 <p>{this.props.comment.comment}</p>
-                <p>By: {this.props.comment.userId}</p>
+                {/* <p>By: {this.props.comment.userId}</p> */}
+                <p><i>By: {this.props.comment.username}</i></p>
             </div>
         );
     }

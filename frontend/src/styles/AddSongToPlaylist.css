@@ -4,6 +4,10 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    /* margin-left: 50px; */
+    padding: 8px;
+    background-color: #d6d6d6;
+    width: 100%;
 }
 
 .add-song-to-playlist-form{
@@ -11,5 +15,20 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    /* margin-top: 30px; */
+    width: 90%;
+}
+
+.add-song-to-playlist-form label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.add-song-to-playlist-form input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 3px;
 }

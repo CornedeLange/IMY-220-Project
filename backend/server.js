@@ -2,7 +2,8 @@ const express = require("express");
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads' });
+
+
 //ADDED FOR D2
 //MONGO DB SETUP
 const {MongoClient} = require("mongodb");
@@ -30,11 +31,17 @@ connect();
 
 app.use(express.json());
 
-//ROUTES
-// app.get('/', async (req, res) => {
-//     //res.send("Hello World");
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+         cb(null, path.join(__dirname, '..', '..', 'frontend', 'public', 'assests','images'));
+        //cb(null, "../frontend/public/assests/images");
+    },
+    filename: function (req, file, cb){
+        cb(null, file.originalname);
+    },
+});
 
-// });
+const upload = multer({ storage : storage });
 
 const getUserCollection = () => db.collection("user");
 const getPlaylistCollection = () => db.collection("playlist");
@@ -73,7 +80,9 @@ app.post("/register", async (req, res) => {
                 numFollowing: 0,
                 friends: [],
                 playlists: [],
-                songs: []
+                songs: [],
+                //ADDED 
+                savedPlaylists: [],
             });
             console.log("Insertion result:", result);
 
@@ -157,10 +166,16 @@ app.get("/api/profile/:userId", async (req, res) => {
     }
 });
 
-//UPDATE PROFILE still FIX************************
-app.put("/profile/:userId", async (req, res) => {
+//UPDATE PROFILE ************************
+app.put("/profile/:userId",upload.single('profilePicture'), async (req, res) => {
     const userId = req.params.userId;
     const updatedProfile = req.body;
+
+    if(req.file){
+        updatedProfile.profilePicture = `/assests/images/${req.file.filename}`;
+    }
+
+   // updatedProfile.profilePicture = `/assests/images/${req.file.filename}`; // Update profile picture URL
     try {
         
         const result = await getUserCollection().updateOne({userId: userId}, {$set: updatedProfile});
@@ -168,9 +183,13 @@ app.put("/profile/:userId", async (req, res) => {
             //res.status(200).send("Profile updated");
             res.status(200).json({message : "Profile updated"});
         } else {
-            res.status(500).send("Failed to update profile");
+            // res.status(500).send("Failed to update profile");
+            res.status(500).json({ error: 'An error occurred while updating the profile.' });
         }
     } catch (error) {
+        if(error instanceof multer.MulterError){
+            return res.status(400).json({ message: error.message });
+        }
         console.error("Failed to update user profile", error);
         res.status(500).send("Internal server error");
     }
@@ -244,6 +263,7 @@ app.get("/profile/:userId/songs", async (req, res) => {
     }
 });
 
+//*******************DO NOT USE THIS ******************* */
 // FOLLOW A USER***********
 app.post("/profile/:userId/follow", async (req, res) => {
     const userId = req.params.userId;
@@ -289,7 +309,121 @@ app.post("/profile/:userId/unfollow", async (req, res) => {
         res.status(500).send("Internal server error");
     }
 });
+//*******************DO NOT USE THIS ******************* */
 
+///ADD A FRIEND
+app.post("/addFriend", async (req, res) => {
+    const {userId, friendId} = req.body;
+
+    if(!userId || !friendId){
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    try {
+        const userCollection = await getUserCollection();
+        const user = await userCollection.findOne({ userId});
+        const friend = await userCollection.findOne({ userId: friendId });
+
+        if (!user || !friend) {
+            return res.status(404).json({ message: "One or both users not found" });
+        }
+
+        //CHECK IF ALREADY FRIENDS
+        if(user.friends.includes(friendId)){
+            return res.status(400).json({ message: "Already friends" });
+        }
+
+        const userUpdate = await userCollection.updateOne(
+            { userId },
+            { $push: { friends: friendId } }
+        );
+
+        const friendUpdate = await userCollection.updateOne(
+            { userId: friendId },
+            { $push: { friends: userId } }
+        );
+
+        if (userUpdate.modifiedCount > 0 && friendUpdate.modifiedCount > 0) {
+            return res.status(200).json({ message: "Friend added" });
+        }else{
+            return res.status(500).json({ message: "Failed to add friend" });
+        }
+    }
+    catch(error){
+        console.error("Failed to add friend", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+//REMOVE A FRIEND
+app.post("/removeFriend", async (req, res) => {
+    const {userId, friendId} = req.body;
+
+    if(!userId || !friendId){
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    try{
+        const userCollection = await getUserCollection();
+        const user = await userCollection.findOne({ userId });
+        const friend = await userCollection.findOne({ userId: friendId });
+
+        if (!user || !friend) {
+            return res.status(404).json({ message: "One or both users not found" });
+        }
+
+        //CHECK IF ALREADY FRIENDS
+        if(!user.friends.includes(friendId)){
+            return res.status(400).json({ message: "Not friends" });
+        }
+
+        const userUpdate = await userCollection.updateOne(
+            { userId },
+            { $pull: { friends: friendId } }
+        );
+
+        const friendUpdate = await userCollection.updateOne(
+            { userId: friendId },
+            { $pull: { friends: userId } }
+        );
+
+        if (userUpdate.modifiedCount > 0 && friendUpdate.modifiedCount > 0) {
+            return res.status(200).json({ message: "Friend removed" });
+        }else{
+            return res.status(500).json({ message: "Failed to remove friend" });
+        }
+    }
+    catch(error){
+        console.error("Failed to remove friend", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+//CHECK IF USERS ARE FRIENDS
+app.post("/checkFriendStatus", async (req, res) => {
+    const {userId, profileId} = req.body;
+
+    if(!userId || !profileId){
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    try{
+        const userCollection = await getUserCollection();
+        const user = await userCollection.findOne({ userId});
+
+        if(!user){
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const isFriend = user.friends.includes(profileId);
+        return res.status(200).json({ isFriend });
+
+    }catch(error){
+        console.error("Failed to check friend status", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 // Get the friends list of a user
 app.get("/profile/:userId/friends", async (req, res) => {
@@ -310,10 +444,12 @@ app.get("/profile/:userId/friends", async (req, res) => {
 });
 
 
+
 //CREATE A PLAYLIST ***********************************
-app.post("/createPlaylist", async (req, res) => {
+app.post("/createPlaylist", upload.single('coverImage'), async (req, res) => {
     const { playlistName, genre, description, hashtags, userId } = req.body;
-    const coverImage = req.file ? req.file.path : req.body.coverImage;
+    // const coverImage = req.file ? req.file.path : req.body.coverImage;
+    const coverImage = req.file ? `/assests/images/${req.file.filename}` : "https://via.placeholder.com/150";
 
     if (!playlistName || !genre || !description || !userId) {
         return res.status(400).send("Playlist name, genre and description are required");
@@ -326,8 +462,10 @@ app.post("/createPlaylist", async (req, res) => {
             name: playlistName,
             genre,
             description,
-            coverImage: coverImage || "https://via.placeholder.com/150", // Optional cover image
-            hashtags: hashtags || [],
+            // coverImage: coverImage || "https://via.placeholder.com/150", // Optional cover image
+            coverImage: coverImage,
+            // hashtags: hashtags || [],
+            hashtags: Array.isArray(hashtags) ? hashtags : [],
             numSongs : 0,
             songs: [],
             comments: [],
@@ -365,7 +503,7 @@ app.post("/createPlaylist", async (req, res) => {
 //GET SPECIFIC PLAYLIST
 app.get("/api/playlist/:playlistId", async (req, res) => {
     const playlistId = req.params.playlistId;
-    console.log("PlaylistID :" , playlistId);
+    //console.log("PlaylistID :" , playlistId);
 
     try {
         const playlist = await getPlaylistCollection().findOne({ playlistId: playlistId });
@@ -419,6 +557,79 @@ app.post("/playlist/:playlistId/comment", async (req, res) => {
     }
 });
 
+//fetch playlist comments
+app.get('/api/comments/:playlistId', async (req, res) => {
+    const playlistId = req.params.playlistId;
+    try {
+        const playlist = await getPlaylistCollection().findOne({ playlistId: playlistId });
+
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist not found" });
+        }
+
+        const comments = playlist.comments;
+        const commentsWithUsernames = await Promise.all(comments.map(async (comment) => {
+            const user = await getUserCollection().findOne({ userId: comment.userId });
+            return { ...comment, username: user.username };
+
+        }));
+
+        res.status(200).json(commentsWithUsernames);
+    } catch (error) {
+        console.error("Failed to retrieve comments", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+
+});
+
+
+//SAVE PLAYLIST FOR USER
+app.put('/api/users/save-playlist', async (req, res) => {
+    const {userId, playlistId} = req.body;
+    try{
+        const user = await getUserCollection().findOneAndUpdate(
+            { userId },
+            { $addToSet: { savedPlaylists: playlistId } },
+            {new: true}
+        );
+        res.json(user);
+    }
+    catch(error){
+        console.error("Failed to save playlist", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+//FETCH USER SAVED PLAYLIST AND SEE IF ALREADY SAVED
+app.get('/api/users/saved-playlists', async (req, res) => {
+    const userId = req.query.userId;
+    try{
+        const user = await getUserCollection().findOne({userId});
+        res.json(user.savedPlaylists);
+    }
+    catch(error){
+        console.error("Failed to retrieve saved playlists", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+//FETCH USERS SAVED PLAYLIST WITH INFO
+app.get('/api/users/saved-playlists-info', async (req, res) => {
+    const userId = req.query.userId;
+    try{
+        const user = await getUserCollection().findOne({userId});
+        if(!user || !user.savedPlaylists){
+            return res.json([]);
+        }
+        const savedPlaylists = await getPlaylistCollection().find({playlistId: {$in: user.savedPlaylists}}).toArray();
+        
+        res.json(savedPlaylists);
+    }catch(error){
+        console.error("Failed to retrieve saved playlists", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 //ADD SONG TO PLAYLIST
 app.post("/playlist/:playlistId/song", async (req, res) => {
     const playlistId = req.params.playlistId;
@@ -456,9 +667,18 @@ app.post("/playlist/:playlistId/song", async (req, res) => {
 
 
 // Update an existing playlist
-app.put("/playlist/:playlistId", async (req, res) => {
+app.put("/playlist/:playlistId", upload.single('coverImage'), async (req, res) => {
     const playlistId = req.params.playlistId;
     const updatedPlaylist = req.body;
+    //console.log("UPDATED PLAYLIST: ", updatedPlaylist);
+    //updatedPlaylist.coverImage = `/assests/images/${req.file.filename}`; // Update cover image URL
+    if(req.file){
+        updatedPlaylist.coverImage = `/assests/images/${req.file.filename}`;
+    }
+
+    //make hashtags an array
+    updatedPlaylist.hashtags = Array.isArray(updatedPlaylist.hashtags) ? updatedPlaylist.hashtags : updatedPlaylist.hashtags.split(",").map(tag => tag.trim());
+    
     try {
       const playlistCollection = await getPlaylistCollection();
       const result = await playlistCollection.updateOne(
@@ -466,6 +686,7 @@ app.put("/playlist/:playlistId", async (req, res) => {
         { $set: updatedPlaylist }
       );
       if (result.acknowledged) {
+        //console.log("UPDATED PLAYLIST: ", updatedPlaylist)
         res.status(200).json({ success: true, message: "Playlist updated" });
       } else {
         res.status(500).json({ success: false, message: "Failed to update playlist" });

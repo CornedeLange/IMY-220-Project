@@ -6,8 +6,6 @@ import Song from "../components/Song";
 import SearchInput from "../components/SearchInput";
 import "../styles/Explore.css";
 
-//json dummy data for songs
-
 class Explore extends React.Component{
     constructor(props){
         super(props);
@@ -72,45 +70,99 @@ class Explore extends React.Component{
             });
         }
 
+        //HANDLE HASHTAG-CLICK SEARCH
+        handleHashtagClick = (hashtag) => {
+            this.setState({
+                searchTerm: hashtag
+            });
+        } 
+
+        //HANDLE HASHTAG SEARCH
+        handleHashtagSearch = (hashtag) => {
+            this.setState({
+                searchTerm: hashtag
+            });
+        }
+
+        
+
     render(){
-        //filter out profile that is not the current user
-        // const userIdFromLocalStorage = localStorage.getItem("userId");
-        // const filteredProfiles = this.state.profiles.filter(profile => profile.userId !== userIdFromLocalStorage);
-        // this.setState({profiles: filteredProfiles});
 
         const { searchTerm, songs, profiles, playlists } = this.state;
+        const currentUserId = localStorage.getItem("userId");
 
         // Filter data based on search term
         const filteredSongs = songs.filter((song) =>
           song.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          song.artist.toLowerCase().includes(searchTerm.toLowerCase())
+          song.artist.toLowerCase().includes(searchTerm.toLowerCase()) 
         );
     
         const filteredProfiles = profiles.filter((profile) =>
-          profile.username.toLowerCase().includes(searchTerm.toLowerCase())
+          profile.username.toLowerCase().includes(searchTerm.toLowerCase()) && 
+          profile.userId !== currentUserId 
+          &&
+          !profile.friends.includes(currentUserId)
         );
     
         const filteredPlaylists = playlists.filter((playlist) =>
-          playlist.name.toLowerCase().includes(searchTerm.toLowerCase())
+          (playlist.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        playlist.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          playlist.hashtags.some((hashtag) => hashtag.toLowerCase().includes(searchTerm.toLowerCase())) ) &&
+          playlist.createdBy !== currentUserId
+          
+          //convert hashtags to array if not array
+  //         Array.isArray(playlist.hashtags) ? 
+  // Array.from(playlist.hashtags).map((hashtag) => hashtag.toLowerCase()).includes(searchTerm.toLowerCase()) : 
+  // [playlist.hashtags].map((hashtag) => hashtag.toLowerCase()).includes(searchTerm.toLowerCase())
         );
+
+
+         //Elimanate duplicates in songs
+         const eliminateDuplicatesByName =(songs) => {
+          const uniqueSongs = [];
+          const uniqueSongNames = [];
+          songs.forEach((song) => {
+              if(!uniqueSongNames.includes(song.name)){
+                  uniqueSongNames.push(song.name);
+                  uniqueSongs.push(song);
+              }
+          });
+          return uniqueSongs;
+      }
+        ///CHANGE MAYBE TO AVOID DUPLICATES SONGS IN EXPLORE************************
+        // Limit the number of items displayed
+        const maxItems = 10;
+        const uniqueFilteredSongs = eliminateDuplicatesByName(filteredSongs);
+        // const limitedSongs = Array.from(new Set(filteredSongs.map((song) => song.link)))
+        //     .map((link) => filteredSongs.find((song) => song.link === link))
+        //     .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+        //     .slice(0, maxItems);
+        const limitedSongs = uniqueFilteredSongs.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)).slice(0, maxItems);
+
+       
+
+        const limitedProfiles = filteredProfiles.slice(0, maxItems);
+        const limitedPlaylists = filteredPlaylists.slice(0, maxItems);
 
 
     return (
         <div>
           <Navigation />
           <div className="explore-container">
-            <SearchInput onSearch={this.handleSearch} />
+            <SearchInput onSearch={this.handleSearch} onHashtagSearch={this.handleHashtagSearch} />
             <div className="explore-content">
               <h1>Explore</h1>
 
               {/* Explore Playlists */}
               <div className="explore-section">
                 <h2>Explore Playlists</h2>
-                {filteredPlaylists.length === 0 ? (
+                {/* {filteredPlaylists.length === 0 ? ( */}
+                {limitedPlaylists.length === 0 ? (
                   <p className="no-songs-playlist-profile">No playlists match the search term "{searchTerm}"</p>
                 ) : (
                   <div className="explore-grid explore-playlist-grid">
-                    {filteredPlaylists.map((playlist, index) => (
+                    {/* {filteredPlaylists.map((playlist, index) => ( */}
+                    {limitedPlaylists.map((playlist, index) => (
                       <PlaylistPreview
                         key={index}
                         playlistName={playlist.name}
@@ -119,6 +171,8 @@ class Explore extends React.Component{
                         coverImage={playlist.coverImage}
                         hashtags={playlist.hashtags}
                         playlistId={playlist.playlistId}
+                        onHashtagClick={this.handleHashtagClick}
+                        genre={playlist.genre}
                       />
                     ))}
                   </div>
@@ -128,11 +182,13 @@ class Explore extends React.Component{
               {/* Explore Profiles */}
               <div className="explore-section">
                 <h2>Explore New People</h2>
-                {filteredProfiles.length === 0 ? (
+                {/* {filteredProfiles.length === 0 ? ( */}
+                {limitedProfiles.length === 0 ? (
                   <p className="no-songs-playlist-profile">No profiles match the search term "{searchTerm}"</p>
                 ) : (
                   <div className="explore-grid explore-profile-grid">
-                    {filteredProfiles.map((profile, index) => (
+                    {/* {filteredProfiles.map((profile, index) => ( */}
+                    {limitedProfiles.map((profile, index) => (
                       <ProfilePreview
                         key={index}
                         username={profile.username}
@@ -149,11 +205,12 @@ class Explore extends React.Component{
               {/* Explore Songs */}
               <div className="explore-section">
                 <h2>Explore Songs</h2>
-                {filteredSongs.length === 0 ? (
+                {/* {filteredSongs.length === 0 ? ( */}
+                {limitedSongs.length === 0 ? (
                   <p className="no-songs-playlist-profile">No songs match the search term "{searchTerm}"</p>
                 ) : (
                   <div className="explore-grid explore-songs-grid">
-                    {filteredSongs.map((song, index) => (
+                    {/* {filteredSongs.map((song, index) => (
                       <Song
                         key={index}
                         name={song.name}
@@ -161,8 +218,44 @@ class Explore extends React.Component{
                         link={song.link}
                         dateAdded={song.dateAdded}
                         addedBy={song.addedBy}
-                      />
-                    ))}
+                      /> */}
+                      {/* Do not display duplicates (songs with the same link) */}
+                      {/* {Array.from(new Set(filteredSongs.map((song) => song.link))
+                      .map((link) => filteredSongs.find((song) => song.link === link))
+                      .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+                      .map((song, index) => (
+                        <Song
+                          key={index}
+                          name={song.name}
+                          artist={song.artist}
+                          link={song.link}
+                          dateAdded={song.dateAdded}
+                          addedBy={song.addedBy}
+                        /> */}
+                        {/* *********************** */}
+                        {/* {Array.from(new Set(filteredSongs.map((song) => song.link)))
+                        .map((link) => filteredSongs.find((song) => song.link === link))
+                        .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+                        .map((song, index) => (
+                          <Song
+                            key={index}
+                            name={song.name}
+                            artist={song.artist}
+                            link={song.link}
+                            dateAdded={song.dateAdded}
+                            addedBy={song.addedBy}
+                          />
+                        ))} */}
+                        {limitedSongs.map((song, index) => (
+                          <Song
+                            key={index}
+                            name={song.name}
+                            artist={song.artist}
+                            link={song.link}
+                            dateAdded={song.dateAdded}
+                            addedBy={song.addedBy}
+                          />
+                        ))}
                   </div>
                 )}
               </div>

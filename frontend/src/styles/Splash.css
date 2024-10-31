@@ -10,7 +10,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Ensure background covers entire page */
+    /* background-attachment: fixed;  */
     color: white; /* Ensure text is readable */
     text-align: center;
 }
@@ -34,7 +34,7 @@
 .logo-image {
     width: 200px;
     height: 200px;
-    /* margin-bottom: 10px; Adjust margin to move content up */
+    /* margin-bottom: 10px;  */
 }
 
 .heading, .heading-2, .heading-3 {
@@ -44,7 +44,7 @@
 .signin-container{
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     justify-content: center;
     width: 100%;
     margin-right: 165px;
@@ -56,7 +56,7 @@
     flex-direction: column;
     gap: 75px;
     /* margin-top: 10px;  */
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .login-button, .signup-button {
@@ -75,11 +75,19 @@
     color: black;
 }
 
-.form-container {
+/* .signup-form{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 40%;
+} */
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
     width: 40%; /* Adjust width as needed */
 }
 

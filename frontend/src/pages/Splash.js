@@ -17,6 +17,13 @@ class Splash extends React.Component{
         //bind methods
         this.showLogin = this.showLogin.bind(this);
         this.showSignup = this.showSignup.bind(this);
+        this.handleSignupComplete = this.handleSignupComplete.bind(this);
+    }
+
+    handleSignupComplete =() => {
+        this.setState({
+            clickedSignup: false
+        });
     }
 
     //methods to show login or sign up forms
@@ -51,7 +58,7 @@ class Splash extends React.Component{
                     </div>
                     <div className="form-container">
                         {this.state.clickedLogin ? <Login/> : null}
-                        {this.state.clickedSignup ? <SignUp/> : null}
+                        {this.state.clickedSignup ? <SignUp onSignupComplete={this.handleSignupComplete}/> : null}
                     </div>
                 </div>
                 

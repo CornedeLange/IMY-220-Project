@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../styles/Playlist.css";
 
 const EditPlaylist = ({ playlist, onEditComplete }) => {
@@ -9,22 +9,28 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
     //const [hashtags, setHashtags] = useState(playlist.hashtags ? playlist.hashtags.split(",") : []);
     const [hashtags, setHashtags] = useState(Array.isArray(playlist.hashtags) ? playlist.hashtags : (playlist.hashtags || "").split(","));
 
+    //for genre
+    // useEffect(() => {
+    //     setGenre(playlist.genre);
+    // }, [playlist.genre]);
+    
+
     const handleSubmit = async (e) => {
-        //e.preventDefault();
-        // Update playlist data here
-        //onEditComplete();
-
-
-        //ADDED
         e.preventDefault();
+        // const updatedPlaylist = { name, description, coverImage, genre,  hashtags: hashtags, };
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('genre', genre);
+        formData.append('hashtags', hashtags.join(","));
+        formData.append('coverImage', coverImage);
 
-
-        const updatedPlaylist = { name, description, coverImage, genre,  hashtags: hashtags, };
         try {
         const response = await fetch(`/playlist/${playlist.playlistId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedPlaylist),
+            // headers: { 'Content-Type': 'application/json' },
+            // body: JSON.stringify(updatedPlaylist),
+            body: formData,
         });
         const data = await response.json();
         if (data.success) {
@@ -37,11 +43,20 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
         }
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setCoverImage(file);
+    };
+
     const handleHashtagChange = (e) => {
         const hashtagString = e.target.value;
         const hashtagsArray = hashtagString.split(",").map((hashtag) => hashtag.trim());
         setHashtags(hashtagsArray);
       };
+
+    const handleGenreChange = (e) => {
+        setGenre(e.target.value);
+    }
 
     return (
         <form onSubmit={handleSubmit} className="edit-playlist-form">
@@ -56,7 +71,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
             <label>
                 Genre
                 {/* <select> */}
-                <select value={genre} onChange={(e) => setGenre(e.target.value)}>
+                {/* <select defaultValue={genre} onChange={(e) => setGenre(e.target.value)}> */}
+                <select defaultValue={genre} onChange={handleGenreChange}>
                     <option value="rock">Rock</option>
                     <option value="pop">Pop</option>
                     <option value="hip-hop">Hip Hop</option>
@@ -67,7 +83,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
             </label>
             <label>
                 Cover Image URL:
-                <input type="text" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} />
+                {/* <input type="text" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} /> */}
+                <input type="file" onChange={handleImageChange} />
             </label>
             <label>
                 Hashtags:
@@ -75,6 +92,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
                 <input type="text" value={hashtags.join(",")} onChange={handleHashtagChange} />
             </label>
             <button type="submit">Save</button>
+            {/* cancel button */}
+            <button type="button" onClick={onEditComplete}>Cancel</button>
         </form>
     );
 };
