@@ -2,6 +2,7 @@
 Github Repository setup for IMY-220 Project
 
 ***Instructions for Docker***
+
 Build: docker-compose up --build
 
 Down: docker-compose down
