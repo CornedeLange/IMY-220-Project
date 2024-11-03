@@ -36,6 +36,7 @@ Link: https://open.spotify.com/track/2HSmyk2qMN8WQjuGhaQgCk?si=564259fa5cce418b
 
 
 
+**OLD**
 
 /* docker build -t u23788862 .
 docker run --name u23788862 -p 3000:3000 u23788862 */
