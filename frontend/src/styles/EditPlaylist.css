@@ -1,38 +1,16 @@
-/* .create-playlist-container{
+.edit-playlist-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
     background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 25px;
-}
-
-.create-playlist-form{
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-} */
-
-.create-playlist-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    /* background-color: #f0f0f0; */
-    background-color: #2f4f7f;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #2f4f7f;
 }
 
-.create-playlist-form {
+.edit-playlist-form {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -43,14 +21,14 @@
     background-color: #ffffff;
 }
 
-.create-playlist-form label {
+.edit-playlist-form label {
     margin: 10px 0 5px;
     font-weight: bold;
 }
 
-.create-playlist-form input[type="text"],
-.create-playlist-form textarea,
-.create-playlist-form select {
+.edit-playlist-form input[type="text"],
+.edit-playlist-form textarea,
+.edit-playlist-form select {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -58,11 +36,11 @@
     border-radius: 5px;
 }
 
-.create-playlist-form input[type="file"] {
+.edit-playlist-form input[type="file"] {
     margin-bottom: 15px;
 }
 
-.create-playlist-form button {
+.edit-playlist-form button {
     background-color: #f79c35;
     color: white;
     border: none;
@@ -70,8 +48,9 @@
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
+    margin-bottom: 10px;
 }
 
-.create-playlist-form button:hover {
+.edit-playlist-form button:hover {
     background-color: #e68a2c;
 }

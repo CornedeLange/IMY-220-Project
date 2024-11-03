@@ -30,7 +30,7 @@ class Explore extends React.Component{
           const response = await fetch("/songs");
           const data = await response.json();
           //debug
-          console.log("Songs", data);
+         // console.log("Songs", data);
           this.setState({songs: data});
         }
         catch(error){
@@ -43,7 +43,7 @@ class Explore extends React.Component{
           const response = await fetch("/playlists");
           const data = await response.json();
           //debug
-          console.log("Playlists", data);
+         // console.log("Playlists", data);
           this.setState({playlists: data});
         }
         catch(error){
@@ -55,7 +55,7 @@ class Explore extends React.Component{
             try{
                 const response = await fetch("/profiles");
                 const data = await response.json();
-                console.log("Profiles", data);
+                //console.log("Profiles", data);
                 this.setState({profiles: data});
             }
             catch(error){
@@ -64,7 +64,7 @@ class Explore extends React.Component{
         }
 
         handleSearch = (searchTerm) => {
-            console.log("Search Term: ", searchTerm);
+           // console.log("Search Term: ", searchTerm);
             this.setState({
                 searchTerm: searchTerm
             });

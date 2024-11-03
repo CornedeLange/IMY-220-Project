@@ -6,6 +6,7 @@
     justify-content: flex-start; /* Align content to the top */
     /* padding-top: 20px; Add padding at the top */
     height: 100vh;
+    /* overflow: visible;  */
     background-image: var(--background-image);
     background-size: cover;
     background-position: center;
@@ -13,6 +14,8 @@
     /* background-attachment: fixed;  */
     color: white; /* Ensure text is readable */
     text-align: center;
+    /* overflow: hidden;  */
+    
 }
 
 .splash-page::before {
@@ -41,6 +44,19 @@
     margin: 5px 0; 
 }
 
+.heading{
+    color: #f79c35;
+}
+
+.heading-2{
+    color:#a86212;
+}
+
+.heading-3{
+    /* color:#fad1a1; */
+    color: white;
+}
+
 .signin-container{
     display: flex;
     flex-direction: row;
@@ -48,6 +64,7 @@
     justify-content: center;
     width: 100%;
     margin-right: 165px;
+    /* margin-bottom: 10px; */
     
 }
 
@@ -89,5 +106,8 @@
     align-items: center;
     /* justify-content: center; */
     width: 40%; /* Adjust width as needed */
+
+    max-height: 80vh;
+    
 }
 

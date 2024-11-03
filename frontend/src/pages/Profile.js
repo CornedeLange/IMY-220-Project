@@ -27,23 +27,41 @@ const Profile = () => {
     const [songs, setSongs] = useState([]);
     const [savedPlaylists, setSavedPlaylists] = useState([]);
 
-    useEffect(() => {
-      const fetchProfileData = async () => {
-        try {
-          const response = await fetch(`/api/profile/${userId}`);
-          const data = await response.json();
-          console.log(data);
-          setProfile(data);
+    // useEffect(() => {
+    //   const fetchProfileData = async () => {
+    //     try {
+    //       const response = await fetch(`/api/profile/${userId}`);
+    //       const data = await response.json();
+    //       //console.log(data);
+    //       setProfile(data);
 
-          //ADDED
-          setIsFriend(data.friends.includes(currentUserId));
-          //ADDED
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    //       //ADDED
+    //       setIsFriend(data.friends.includes(currentUserId));
+    //       //ADDED
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+    //   };
+    //   fetchProfileData();
+    // }, [userId, currentUserId]);
+
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(`/api/profile/${userId}`);
+        const data = await response.json();
+        //console.log(data);
+        setProfile(data);
+
+        //ADDED
+        setIsFriend(data.friends.includes(currentUserId));
+        //ADDED
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    useEffect(() => {
       fetchProfileData();
-    // }, [userId]);
     }, [userId, currentUserId]);
 
     useEffect(() => {
@@ -52,7 +70,7 @@ const Profile = () => {
           const response = await fetch(`/profile/${userId}/playlists`);
           const data = await response.json();
           //debug
-          console.log("Playlists", data);
+          //console.log("Playlists", data);
           setPlaylist(data);
         } catch (error) {
           console.error(error);
@@ -68,7 +86,7 @@ const Profile = () => {
           const response = await fetch(`/profile/${userId}/songs`);
           const data = await response.json();
           //debug
-          console.log("Songs", data);
+          //console.log("Songs", data);
           setSong(data);
         } catch (error) {
           console.error(error);
@@ -84,7 +102,7 @@ const Profile = () => {
           const response = await fetch(`/profile/${userId}/friends`);
           const data = await response.json();
           //debug
-          console.log(data);
+          //console.log(data);
           setFollowersData(data);
 
           //setIsFriend(data.includes(currentUserId))
@@ -145,7 +163,7 @@ const Profile = () => {
             body: updatedProfile,
           });
           const data = await response.json();
-          console.log(data);
+          //console.log(data);
           setProfile((prevProfile) => ({ ...prevProfile, ...updatedProfile }));
           setIsEditingProfile(false);
           fetchProfileData();
@@ -157,7 +175,7 @@ const Profile = () => {
       useEffect(() => {
         const fetchSvedPlaylists = async () => {
           try{
-            const response = await fetch(`/api/users/saved-playlists-info?userId=${currentUserId}`);
+            const response = await fetch(`/api/users/saved-playlists-info?userId=${userId}`);
             const data = await response.json();
             setSavedPlaylists(data);
 

@@ -75,10 +75,23 @@
 
 .explore-playlist-grid, .explore-profile-grid {
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    /* background-color: #2f4f7f; */
+}
+
+.explore-playlist-grid{
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 3.25%;
+ 
+}
+
+.explore-profile-grid{
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 3.25%;
 }
 
 .explore-songs-grid {
     grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    /* background-color: #2f4f7f; */
 }
 
 .explore-section h2 {

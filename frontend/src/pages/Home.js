@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import Feed from "../components/Feed";
 import SearchInput from "../components/SearchInput";
@@ -9,26 +10,24 @@ class Home extends React.Component{
         this.state = {
             song: null,
             searchTerm: "",
+            userId: localStorage.getItem("userId") || null,
         };
         this.handleSearch = this.handleSearch.bind(this);
     }
 
     //Method to handle search term, will eventually filter
     handleSearch = (searchTerm) => {
-        console.log("Search Term: ", searchTerm);
+        //console.log("Search Term: ", searchTerm);
         this.setState({
             searchTerm: searchTerm
         });
     }
 
-    //if userId not in localstorage redirect to splash page
-    componentDidMount(){
-        if(!localStorage.getItem("userId")){
-            this.props.history.push("/splash");
-        }
-    }
-
     render(){
+        if(!this.state.userId){
+            return <Navigate to="/splash"/>
+
+        }
         return (
             <div>
                 {/* Home */}

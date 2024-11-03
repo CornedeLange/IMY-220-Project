@@ -12,7 +12,7 @@ const BasicProfile = ({ username, profilePicture, bio, numFollowers,numFriends, 
 
     const userIdFromLocalStorage = localStorage.getItem("userId");
     const isCurrentUserProfile = userIdFromLocalStorage === userId;
-    console.log("Image: ", profilePicture);
+   // console.log("Image: ", profilePicture);
     return (
         <div className="basic-profile-container">
             <aside>

@@ -1,13 +1,19 @@
-version: '3'
+version: '3.8'
 services:
   backend:
     build: .
     command: npm start
     ports:
       - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
 
   frontend:
     build: .
     command: npm run watch
     ports:
       - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules

@@ -133,13 +133,13 @@ class CreatePlaylist extends React.Component{
     render() {
         const { playlistName, genre, description, coverImage, hashtags, successMessage, errorMessage } = this.state;
         // Dummy genres for dropdown
-        const genres = ["Pop", "Rock", "Hip Hop", "Jazz", "Metal", "Classical"];
+        const genres = ["Pop", "Rock", "Hip Hop", "Jazz", "Country","Metal", "Classical"];
 
         return (
             <div className="create-playlist-container">
                 <h1>Create Playlist</h1>
                 <form onSubmit={this.handleSubmit} className="create-playlist-form">
-                    <label htmlFor="playlistName">Playlist Name</label>
+                    <label htmlFor="playlistName">Playlist Name:</label>
                     <input
                         type="text"
                         id="playlistName"
@@ -149,7 +149,7 @@ class CreatePlaylist extends React.Component{
                         required
                     />
 
-                    <label htmlFor="genre">Genre</label>
+                    <label htmlFor="genre">Genre:</label>
                     <select
                         id="genre"
                         name="genre"
@@ -163,7 +163,7 @@ class CreatePlaylist extends React.Component{
                         ))}
                     </select>
 
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description">Description:</label>
                     <textarea
                         id="description"
                         name="description"
@@ -171,7 +171,7 @@ class CreatePlaylist extends React.Component{
                         onChange={this.handleInputChange}
                     />
 
-                    <label htmlFor="coverImage">Cover Image URL</label>
+                    <label htmlFor="coverImage">Cover Image URL:</label>
                     <input
                         type="file"
                         id="coverImage"
@@ -180,7 +180,7 @@ class CreatePlaylist extends React.Component{
                         onChange={this.handleFileChange}
                     />
 
-                    <label htmlFor="hashtags">Hashtags (comma separated, e.g. #pop)</label>
+                    <label htmlFor="hashtags">Hashtags (comma separated, e.g. #pop):</label>
                     <input
                         type="text"
                         id="hashtags"
@@ -197,8 +197,7 @@ class CreatePlaylist extends React.Component{
                         value={songs.join(", ")}
                         readOnly
                     /> */}
-                    {/* TODO: Implement functionality to add songs to the playlist */}
-
+                   
                     <button type="submit">Create Playlist</button>
                     {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
                     {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}

@@ -3,10 +3,11 @@
     flex-direction: column;
     align-items: center;
     /* margin-top: 20px; */
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
+    background-color: #2f4f7f;
     padding: 10px;
     /* border-radius: 25px; */
-    
+    height: 100%;
 }
 
 .edit-profile{
@@ -31,6 +32,8 @@
     /* border: 1px solid #ccc; */
     border-radius: 4px;
     box-sizing: border-box;
+    
+    /* color: white; */
 }
 
 .edit-profile input{
@@ -53,7 +56,8 @@
     padding: 10px;
     border-radius: 5px;
     border: none;
-    background-color: #4CAF50;
+    /* background-color: #4CAF50; */
+    background-color: #f79c35;
     color: white;
     font-size: 16px;
     cursor: pointer;

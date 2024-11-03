@@ -5,11 +5,9 @@ WORKDIR /app
 
 COPY package*.json ./
 
-COPY . .
-
 RUN npm install
 
-ENV PORT=3000
+COPY . .
 
 CMD ["npm", "start"]
 

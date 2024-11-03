@@ -32,27 +32,27 @@ function connect() {
   return _connect.apply(this, arguments);
 } //CONNECT
 function _connect() {
-  _connect = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee33() {
-    return _regeneratorRuntime().wrap(function _callee33$(_context33) {
-      while (1) switch (_context33.prev = _context33.next) {
+  _connect = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee34() {
+    return _regeneratorRuntime().wrap(function _callee34$(_context34) {
+      while (1) switch (_context34.prev = _context34.next) {
         case 0:
-          _context33.prev = 0;
-          _context33.next = 3;
+          _context34.prev = 0;
+          _context34.next = 3;
           return client.connect();
         case 3:
           console.log("Connected to MongoDB");
           db = client.db("imy_220_project");
-          _context33.next = 10;
+          _context34.next = 10;
           break;
         case 7:
-          _context33.prev = 7;
-          _context33.t0 = _context33["catch"](0);
-          console.error("Failed to connect to MongoDB", _context33.t0);
+          _context34.prev = 7;
+          _context34.t0 = _context34["catch"](0);
+          console.error("Failed to connect to MongoDB", _context34.t0);
         case 10:
         case "end":
-          return _context33.stop();
+          return _context34.stop();
       }
-    }, _callee33, null, [[0, 7]]);
+    }, _callee34, null, [[0, 7]]);
   }));
   return _connect.apply(this, arguments);
 }
@@ -891,7 +891,7 @@ app.get("/profile/:userId/friends", /*#__PURE__*/function () {
 //CREATE A PLAYLIST ***********************************
 app.post("/createPlaylist", upload.single('coverImage'), /*#__PURE__*/function () {
   var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(req, res) {
-    var _req$body6, playlistName, genre, description, hashtags, userId, coverImage, playlistId, newPlaylist, playListCollection, result, userCollection;
+    var _req$body6, playlistName, genre, description, hashtags, userId, coverImage, hashtagsArray, playlistId, newPlaylist, playListCollection, result, userCollection;
     return _regeneratorRuntime().wrap(function _callee15$(_context15) {
       while (1) switch (_context15.prev = _context15.next) {
         case 0:
@@ -903,7 +903,12 @@ app.post("/createPlaylist", upload.single('coverImage'), /*#__PURE__*/function (
           }
           return _context15.abrupt("return", res.status(400).send("Playlist name, genre and description are required"));
         case 4:
-          _context15.prev = 4;
+          hashtagsArray = Array.isArray(hashtags) ? hashtags : (hashtags || "").split(",").map(function (tag) {
+            return tag.trim();
+          }).filter(function (tag) {
+            return tag !== "";
+          });
+          _context15.prev = 5;
           playlistId = "PL-".concat(Math.random().toString(36).substr(2, 9)); // Generate unique playlist ID
           newPlaylist = {
             playlistId: playlistId,
@@ -913,22 +918,23 @@ app.post("/createPlaylist", upload.single('coverImage'), /*#__PURE__*/function (
             // coverImage: coverImage || "https://via.placeholder.com/150", // Optional cover image
             coverImage: coverImage,
             // hashtags: hashtags || [],
-            hashtags: Array.isArray(hashtags) ? hashtags : [],
+            // hashtags: Array.isArray(hashtags) ? hashtags : [],
+            hashtags: hashtagsArray,
             numSongs: 0,
             songs: [],
             comments: [],
             createdBy: userId,
             dateCreated: new Date().toISOString()
           };
-          _context15.next = 9;
+          _context15.next = 10;
           return getPlaylistCollection();
-        case 9:
+        case 10:
           playListCollection = _context15.sent;
-          _context15.next = 12;
+          _context15.next = 13;
           return playListCollection.insertOne(newPlaylist);
-        case 12:
+        case 13:
           result = _context15.sent;
-          _context15.next = 15;
+          _context15.next = 16;
           return getUserCollection().updateOne({
             userId: userId
           }, {
@@ -937,7 +943,7 @@ app.post("/createPlaylist", upload.single('coverImage'), /*#__PURE__*/function (
             }
           } // Add the playlist to the user's playlists array
           );
-        case 15:
+        case 16:
           userCollection = _context15.sent;
           console.log("Modified count: ", result.insertedCount, userCollection.modifiedCount);
           if (result.acknowledged > 0 && userCollection.modifiedCount > 0) {
@@ -953,21 +959,21 @@ app.post("/createPlaylist", upload.single('coverImage'), /*#__PURE__*/function (
               message: "Failed to create playlist"
             });
           }
-          _context15.next = 24;
+          _context15.next = 25;
           break;
-        case 20:
-          _context15.prev = 20;
-          _context15.t0 = _context15["catch"](4);
+        case 21:
+          _context15.prev = 21;
+          _context15.t0 = _context15["catch"](5);
           console.error("Failed to create playlist", _context15.t0);
           //res.status(500).send("Internal server error");
           res.status(500).json({
             message: "Internal server error"
           });
-        case 24:
+        case 25:
         case "end":
           return _context15.stop();
       }
-    }, _callee15, null, [[4, 20]]);
+    }, _callee15, null, [[5, 21]]);
   }));
   return function (_x29, _x30) {
     return _ref15.apply(this, arguments);
@@ -1584,56 +1590,69 @@ app["delete"]("/api/playlists/:playlistId/songs/:songId", /*#__PURE__*/function 
   };
 }());
 
-//GET ALL SONGS FOR HOME AND EXPLORE PAGE
-app.get("/songs", /*#__PURE__*/function () {
+//DELETE A SONG FROM FEED
+app["delete"]("/songs/:songId", /*#__PURE__*/function () {
   var _ref28 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee28(req, res) {
-    var songs;
+    var songId, result;
     return _regeneratorRuntime().wrap(function _callee28$(_context28) {
       while (1) switch (_context28.prev = _context28.next) {
         case 0:
-          _context28.prev = 0;
-          _context28.next = 3;
-          return getSongCollection().find().toArray();
-        case 3:
-          songs = _context28.sent;
-          res.send(songs);
-          _context28.next = 11;
+          songId = req.params.songId;
+          _context28.prev = 1;
+          _context28.next = 4;
+          return getSongCollection().deleteOne({
+            songId: songId
+          });
+        case 4:
+          result = _context28.sent;
+          if (result.deletedCount > 0) {
+            res.status(200).json({
+              message: "Song deleted"
+            });
+          } else {
+            res.status(404).json({
+              message: "Song not found"
+            });
+          }
+          _context28.next = 12;
           break;
-        case 7:
-          _context28.prev = 7;
-          _context28.t0 = _context28["catch"](0);
-          console.error("Failed to retrieve songs", _context28.t0);
-          res.status(500).send("Internal server error");
-        case 11:
+        case 8:
+          _context28.prev = 8;
+          _context28.t0 = _context28["catch"](1);
+          console.error("Failed to delete song", _context28.t0);
+          res.status(500).json({
+            message: "Internal server error"
+          });
+        case 12:
         case "end":
           return _context28.stop();
       }
-    }, _callee28, null, [[0, 7]]);
+    }, _callee28, null, [[1, 8]]);
   }));
   return function (_x54, _x55) {
     return _ref28.apply(this, arguments);
   };
 }());
 
-//GET ALL PLAYLISTS FOR HOME AND EXPLORE
-app.get("/playlists", /*#__PURE__*/function () {
+//GET ALL SONGS FOR HOME AND EXPLORE PAGE
+app.get("/songs", /*#__PURE__*/function () {
   var _ref29 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee29(req, res) {
-    var playlists;
+    var songs;
     return _regeneratorRuntime().wrap(function _callee29$(_context29) {
       while (1) switch (_context29.prev = _context29.next) {
         case 0:
           _context29.prev = 0;
           _context29.next = 3;
-          return getPlaylistCollection().find().toArray();
+          return getSongCollection().find().toArray();
         case 3:
-          playlists = _context29.sent;
-          res.send(playlists);
+          songs = _context29.sent;
+          res.send(songs);
           _context29.next = 11;
           break;
         case 7:
           _context29.prev = 7;
           _context29.t0 = _context29["catch"](0);
-          console.error("Failed to retrieve playlists", _context29.t0);
+          console.error("Failed to retrieve songs", _context29.t0);
           res.status(500).send("Internal server error");
         case 11:
         case "end":
@@ -1646,25 +1665,25 @@ app.get("/playlists", /*#__PURE__*/function () {
   };
 }());
 
-//get all PROFILES FOR EXPLORE PAGE
-app.get("/profiles", /*#__PURE__*/function () {
+//GET ALL PLAYLISTS FOR HOME AND EXPLORE
+app.get("/playlists", /*#__PURE__*/function () {
   var _ref30 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee30(req, res) {
-    var profiles;
+    var playlists;
     return _regeneratorRuntime().wrap(function _callee30$(_context30) {
       while (1) switch (_context30.prev = _context30.next) {
         case 0:
           _context30.prev = 0;
           _context30.next = 3;
-          return getUserCollection().find().toArray();
+          return getPlaylistCollection().find().toArray();
         case 3:
-          profiles = _context30.sent;
-          res.send(profiles);
+          playlists = _context30.sent;
+          res.send(playlists);
           _context30.next = 11;
           break;
         case 7:
           _context30.prev = 7;
           _context30.t0 = _context30["catch"](0);
-          console.error("Failed to retrieve profiles", _context30.t0);
+          console.error("Failed to retrieve playlists", _context30.t0);
           res.status(500).send("Internal server error");
         case 11:
         case "end":
@@ -1677,25 +1696,56 @@ app.get("/profiles", /*#__PURE__*/function () {
   };
 }());
 
-//ADD SONG TO WEBSITE ROUTE 
-app.post("/addSongToWebsite", /*#__PURE__*/function () {
+//get all PROFILES FOR EXPLORE PAGE
+app.get("/profiles", /*#__PURE__*/function () {
   var _ref31 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee31(req, res) {
-    var _req$body10, name, artist, link, addedBy, songId, result, user;
+    var profiles;
     return _regeneratorRuntime().wrap(function _callee31$(_context31) {
       while (1) switch (_context31.prev = _context31.next) {
         case 0:
+          _context31.prev = 0;
+          _context31.next = 3;
+          return getUserCollection().find().toArray();
+        case 3:
+          profiles = _context31.sent;
+          res.send(profiles);
+          _context31.next = 11;
+          break;
+        case 7:
+          _context31.prev = 7;
+          _context31.t0 = _context31["catch"](0);
+          console.error("Failed to retrieve profiles", _context31.t0);
+          res.status(500).send("Internal server error");
+        case 11:
+        case "end":
+          return _context31.stop();
+      }
+    }, _callee31, null, [[0, 7]]);
+  }));
+  return function (_x60, _x61) {
+    return _ref31.apply(this, arguments);
+  };
+}());
+
+//ADD SONG TO WEBSITE ROUTE 
+app.post("/addSongToWebsite", /*#__PURE__*/function () {
+  var _ref32 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee32(req, res) {
+    var _req$body10, name, artist, link, addedBy, songId, result, user;
+    return _regeneratorRuntime().wrap(function _callee32$(_context32) {
+      while (1) switch (_context32.prev = _context32.next) {
+        case 0:
           _req$body10 = req.body, name = _req$body10.name, artist = _req$body10.artist, link = _req$body10.link, addedBy = _req$body10.addedBy;
           if (!(!name || !artist || !link || !addedBy)) {
-            _context31.next = 3;
+            _context32.next = 3;
             break;
           }
-          return _context31.abrupt("return", res.status(400).json({
+          return _context32.abrupt("return", res.status(400).json({
             message: "Missing required fields"
           }));
         case 3:
-          _context31.prev = 3;
+          _context32.prev = 3;
           songId = "SG-".concat(Math.random().toString(36).substr(2, 9));
-          _context31.next = 7;
+          _context32.next = 7;
           return getSongCollection().insertOne({
             songId: songId,
             name: name,
@@ -1705,10 +1755,10 @@ app.post("/addSongToWebsite", /*#__PURE__*/function () {
             dateAdded: new Date().toISOString()
           });
         case 7:
-          result = _context31.sent;
+          result = _context32.sent;
           // const songId = result.songId;
           console.log("SONG ID: ", songId);
-          _context31.next = 11;
+          _context32.next = 11;
           return getUserCollection().updateOne({
             userId: addedBy
           }, {
@@ -1717,7 +1767,7 @@ app.post("/addSongToWebsite", /*#__PURE__*/function () {
             }
           });
         case 11:
-          user = _context31.sent;
+          user = _context32.sent;
           if (result.acknowledged && user.modifiedCount > 0) {
             res.status(201).json({
               message: "Song added"
@@ -1727,23 +1777,23 @@ app.post("/addSongToWebsite", /*#__PURE__*/function () {
               message: "Failed to add song"
             });
           }
-          _context31.next = 19;
+          _context32.next = 19;
           break;
         case 15:
-          _context31.prev = 15;
-          _context31.t0 = _context31["catch"](3);
-          console.error("Failed to add song", _context31.t0);
+          _context32.prev = 15;
+          _context32.t0 = _context32["catch"](3);
+          console.error("Failed to add song", _context32.t0);
           res.status(500).json({
             message: "Internal server error"
           });
         case 19:
         case "end":
-          return _context31.stop();
+          return _context32.stop();
       }
-    }, _callee31, null, [[3, 15]]);
+    }, _callee32, null, [[3, 15]]);
   }));
-  return function (_x60, _x61) {
-    return _ref31.apply(this, arguments);
+  return function (_x62, _x63) {
+    return _ref32.apply(this, arguments);
   };
 }());
 
@@ -1764,17 +1814,17 @@ app.get('*', function (req, res) {
 });
 app.listen(port, function () {
   console.log("Server is running on http://localhost:".concat(port));
-}).on('close', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee32() {
-  return _regeneratorRuntime().wrap(function _callee32$(_context32) {
-    while (1) switch (_context32.prev = _context32.next) {
+}).on('close', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee33() {
+  return _regeneratorRuntime().wrap(function _callee33$(_context33) {
+    while (1) switch (_context33.prev = _context33.next) {
       case 0:
-        _context32.next = 2;
+        _context33.next = 2;
         return client.close();
       case 2:
         console.log('MongoDB connection closed');
       case 3:
       case "end":
-        return _context32.stop();
+        return _context33.stop();
     }
-  }, _callee32);
+  }, _callee33);
 })));

@@ -9,7 +9,10 @@
     display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000000;
+  /* background-color: #000000; */
+  /* background-color: #301d0a; */
+  background-color: #2f4f7f;
+  /* background-color:  #663300; */
   border-bottom: 2px solid #f79c35; /* Orange theme border */
   padding: 15px 30px;
   /* position: sticky;

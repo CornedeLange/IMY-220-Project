@@ -14,18 +14,24 @@ class Feed extends React.Component {
       showAddSong: false,
       songs: [],
       playlists: [],
+
       currentHashtag: null,
-      currentUser: localStorage.getItem("userId"),
+      currentUser: localStorage.getItem("userId") || null,
       isAdmin: false,
+      //
+      savedPlaylists: [],
     };
     
     this.AddSong = this.AddSong.bind(this);
     this.onHashtagClick = this.onHashtagClick.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.removeDuplicates = this.removeDuplicates.bind(this);
+    // this.handleAddSong = this.handleAddSong.bind(this);
+
   }
 
   componentDidMount() {
+    this.fetchSavedPlaylists();
     this.fetchSongs();
     this.fetchPlaylists();
   }
@@ -35,14 +41,31 @@ class Feed extends React.Component {
     this.setState({ showAddSong: !this.state.showAddSong });
   };
 
-  handleDelete = (songName) =>{
-    this.setState({
-      songs: this.state.songs.filter((song) => song.songName !== songName),
-    });
+  handleDelete = async (songId) => {
+    // this.setState({
+    //   songs: this.state.songs.filter((song) => song.songName !== songName),
+    // });
+
+    //need to make api call to delete song from database
+    try{
+      const response = await fetch(`/songs/${songId}`, {
+        method: "DELETE",
+
+      });
+      if(response.ok){
+        this.fetchSongs();
+      }else{
+        console.error("Failed to delete song");
+      }
+    }
+    catch(error){
+      console.error(error);
+    }
+
   };
 
   onHashtagClick = (hashtag) => {
-    console.log(`Searching playlists for hashtag: ${hashtag}`);
+    //console.log(`Searching playlists for hashtag: ${hashtag}`);
     this.setState({ currentHashtag: hashtag });
   }
 
@@ -51,7 +74,7 @@ class Feed extends React.Component {
       const response = await fetch("/songs");
       const data = await response.json();
       //debug
-      console.log("Songs", data);
+      //console.log("Songs", data);
       this.setState({songs: data});
     }
     catch(error){
@@ -64,8 +87,28 @@ class Feed extends React.Component {
       const response = await fetch("/playlists");
       const data = await response.json();
       //debug
-      console.log("Playlists", data);
-      this.setState({playlists: data});
+      //console.log("Playlists", data);
+      //console.log("DOCKER IS UPDATING?? IF SEE THIS THEN YES");
+      const filteredPlaylists = data.filter(playlist =>
+        // playlist.createdBy === this.state.currentUser || this.state.friends.includes(playlist.createdBy)
+        playlist.createdBy === this.state.currentUser 
+      );
+      // this.setState({playlists: data});
+      this.setState({playlists: filteredPlaylists});
+    }
+    catch(error){
+      console.error(error);
+    }
+  }
+
+  async fetchSavedPlaylists(){
+    // const response = await fetch(`/profile/${userId}/friends`);
+    try{
+      const response = await fetch(`/api/users/saved-playlists-info?userId=${this.state.currentUser}`);
+      const data = await response.json();
+      this.setState({savedPlaylists: data});
+     // console.log("Friends", data);
+      // this.setState({friends: data});
     }
     catch(error){
       console.error(error);
@@ -96,6 +139,8 @@ class Feed extends React.Component {
     return uniqueSongs;
   }
 
+
+
   render() {
     // const filteredPlaylists = this.state.playlists.filter(playlist =>
     //   playlist.playlistName.toLowerCase().includes(this.props.searchTerm.toLowerCase())
@@ -106,6 +151,7 @@ class Feed extends React.Component {
     // );
 
     const uniqueSongs = this.removeDuplicates(this.state.songs);
+    const allPlaylists = [...this.state.playlists, ...this.state.savedPlaylists];
 
     return (
       <div className="feed-container">
@@ -145,7 +191,10 @@ class Feed extends React.Component {
         } */}
 
             {uniqueSongs.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)).map((song, index) => (
-              <Song key={index} name={song.name} artist={song.artist} link={song.link} dateAdded={song.dateAdded} addedBy={song.addedBy} currentUser={this.state.currentUser} isAdmin={this.state.isAdmin} onDelete={() => this.handleDelete(song.name)} />
+              // <Song key={index} name={song.name} artist={song.artist} link={song.link} dateAdded={song.dateAdded} addedBy={song.addedBy} currentUser={this.state.currentUser} isAdmin={this.state.isAdmin} onDelete={() => this.handleDelete(song.name)} />
+              // <Song key={index} name={song.name} artist={song.artist} link={song.link} dateAdded={song.dateAdded} addedBy={song.addedBy} currentUser={this.state.currentUser} isAdmin={this.state.isAdmin}  />
+              // <Song key={index} songId={song.songId} name={song.name} artist={song.artist} link={song.link} dateAdded={song.dateAdded} addedBy={song.addedBy} currentUser={this.state.currentUser} isAdmin={this.state.isAdmin} onDelete={() => this.handleDelete(song.songId)} />
+              <Song key={index} songId={song.songId} name={song.name} artist={song.artist} link={song.link} dateAdded={song.dateAdded} addedBy={song.addedBy} currentUser={this.state.currentUser} isAdmin={this.state.isAdmin}  />
             ))}
           
             
@@ -153,7 +202,8 @@ class Feed extends React.Component {
           <div className="playlist-feed">
             <h2>Playlists</h2>
             <div className="playlist-grid">
-              {this.state.playlists.map((playlist, index) => (
+              {/* {this.state.playlists.map((playlist, index) => ( */}
+              {allPlaylists.map((playlist, index) => (
                 // <PlaylistPreview key={index} {...playlist} onHashtagClick={this.onHashtagClick} />
                 <PlaylistPreview key={index} playlistName={playlist.name} description={playlist.description} numSongs={playlist.numSongs} coverImage={playlist.coverImage} 
                 hashtags={playlist.hashtags} playlistId={playlist.playlistId} onHashtagClick={this.onHashtagClick} 

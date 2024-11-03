@@ -455,6 +455,8 @@ app.post("/createPlaylist", upload.single('coverImage'), async (req, res) => {
         return res.status(400).send("Playlist name, genre and description are required");
     }
 
+    const hashtagsArray = Array.isArray(hashtags) ? hashtags : (hashtags || "").split(",").map(tag => tag.trim()).filter(tag => tag !== "") ;
+
     try {
         const playlistId = `PL-${Math.random().toString(36).substr(2, 9)}`; // Generate unique playlist ID
         const newPlaylist = {
@@ -465,7 +467,8 @@ app.post("/createPlaylist", upload.single('coverImage'), async (req, res) => {
             // coverImage: coverImage || "https://via.placeholder.com/150", // Optional cover image
             coverImage: coverImage,
             // hashtags: hashtags || [],
-            hashtags: Array.isArray(hashtags) ? hashtags : [],
+            // hashtags: Array.isArray(hashtags) ? hashtags : [],
+            hashtags: hashtagsArray,
             numSongs : 0,
             songs: [],
             comments: [],
@@ -755,6 +758,25 @@ app.delete("/api/playlists/:playlistId/songs/:songId", async (req, res) => {
   }
 });
 
+//DELETE A SONG FROM FEED
+app.delete("/songs/:songId", async (req, res) => {
+    const {songId} = req.params;
+
+    try{
+        const result = await getSongCollection().deleteOne({songId : songId});
+
+        if(result.deletedCount > 0){
+            res.status(200).json({message: "Song deleted"});
+        }else{
+            res.status(404).json({message: "Song not found"});
+        }
+    }
+    catch(error){
+        console.error("Failed to delete song", error);
+        res.status(500).json({message: "Internal server error"});
+    }
+});
+
 //GET ALL SONGS FOR HOME AND EXPLORE PAGE
 app.get("/songs", async (req, res) => {
     try {
@@ -847,7 +869,6 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 }).on('close', async () => {
-
     //Disconnect
     await client.close();
     console.log('MongoDB connection closed');

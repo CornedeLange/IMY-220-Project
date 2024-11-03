@@ -16,23 +16,38 @@ const Playlist = () => {
     const userId = localStorage.getItem("userId");
     const isOwner = userId === owner;
 
-    useEffect(() => {
-        const fetchPlaylist = async () =>{
-            try{
+    // useEffect(() => {
+    //     const fetchPlaylist = async () =>{
+    //         try{
                 
-                    const response = await fetch(`/api/playlist/${playlistId}`);
-                    const data = await response.json();
-                    console.log(data);
-                    setPlaylist(data.playlist);
-                    console.log("OWNER: ", data.user.userId);
-                    //setComments(data.playlist.comments);
-                    setOwner(data.user.userId);
-                }catch(error){
-                    console.error(error);
-                }
-            };
-           // setPlaylist(fetchedPlaylist);
-           fetchPlaylist();
+    //                 const response = await fetch(`/api/playlist/${playlistId}`);
+    //                 const data = await response.json();
+    //                 console.log(data);
+    //                 setPlaylist(data.playlist);
+    //                 console.log("OWNER: ", data.user.userId);
+    //                 //setComments(data.playlist.comments);
+    //                 setOwner(data.user.userId);
+    //             }catch(error){
+    //                 console.error(error);
+    //             }
+    //         };
+    //        // setPlaylist(fetchedPlaylist);
+    //        fetchPlaylist();
+    // }, [playlistId]);
+
+    const fetchPlaylist = async () => {
+        try {
+            const response = await fetch(`/api/playlist/${playlistId}`);
+            const data = await response.json();
+            setPlaylist(data.playlist);
+            setOwner(data.user.userId);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchPlaylist();
     }, [playlistId]);
 
 
@@ -53,7 +68,7 @@ const Playlist = () => {
     const handleEditToggle = () => {
         setIsEditing(!isEditing);
         // fetchPlaylist();
-        this.fetchPlaylist();
+        fetchPlaylist();
     };
 
     const handleDeletePlaylist = async () => {

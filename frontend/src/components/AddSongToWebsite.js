@@ -119,7 +119,7 @@ class AddSongToWebsite extends React.Component{
     };
 
     isValidSpotifyUrl = (url) => {
-      const regex = /(?:track\/|spotify:track:)([a-zA-Z0-9]+)/;
+      const regex = /(?:track\/|spotify:track:)([a-zA-Z0-9]+)/; //example
       return regex.test(url);
     }
 

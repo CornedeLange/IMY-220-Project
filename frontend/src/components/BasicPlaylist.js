@@ -93,6 +93,8 @@ class BasicPlaylist extends React.Component {
         const userId = localStorage.getItem("userId");
         const isUserPlaylist = userId === owner;
 
+        const sortedSongs = songs.sort((a,b ) => new Date(b.dateAdded) - new Date(a.dateAdded)); 
+
         //console.log("IMAGE FOR PLAYLIST: ", playlist.coverImage);
         //console log song dateAdded
         // console.log("SONG DATE ADDED: ", this.state.songs.map(song => song.dateAdded));
@@ -141,7 +143,8 @@ class BasicPlaylist extends React.Component {
                         //<Song key={song.songId} {...song} />
                         <Song key={song.songId} name={song.name} artist={song.artist} addedBy={song.addedBy} link={song.link} dateAdded={song.dateAdded} />
                     ))} */}
-                    {this.state.songs.map((song, index) => (
+                    {/* {this.state.songs.map((song, index) => ( */}
+                    {sortedSongs.map((song, index) => (
                     //     console.log("SONG DATE ADDED: ", song.dateAdded, "Song name: ", song.name),
                     //    song.datAdded && ( <Song key={song.songId || index} currentUser={userId} name={song.name} addedBy={song.addedBy} artist={song.artist} link={song.link} dateAdded={song.dateAdded} onDelete={song.songId ? () => this.handleDeleteSong(song.songId) : null}/>
                     // )

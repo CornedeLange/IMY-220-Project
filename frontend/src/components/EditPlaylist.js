@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import "../styles/Playlist.css";
+//import "../styles/Playlist.css";
+import "../styles/EditPlaylist.css";
 
 const EditPlaylist = ({ playlist, onEditComplete }) => {
     const [name, setName] = useState(playlist.name);
@@ -59,6 +60,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
     }
 
     return (
+        <div className="edit-playlist-container">
+            <h1>Edit Playlist</h1>
         <form onSubmit={handleSubmit} className="edit-playlist-form">
             <label>
                 Name:
@@ -69,7 +72,7 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
             </label>
             <label>
-                Genre
+                Genre:
                 {/* <select> */}
                 {/* <select defaultValue={genre} onChange={(e) => setGenre(e.target.value)}> */}
                 <select defaultValue={genre} onChange={handleGenreChange}>
@@ -77,6 +80,8 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
                     <option value="pop">Pop</option>
                     <option value="hip-hop">Hip Hop</option>
                     <option value="jazz">Jazz</option>
+                    <option value="country">Country</option>
+                    <option value="metal">Metal</option>
                     <option value="classical">Classical</option>
                     <option value="other">Other</option>
                 </select>
@@ -95,6 +100,7 @@ const EditPlaylist = ({ playlist, onEditComplete }) => {
             {/* cancel button */}
             <button type="button" onClick={onEditComplete}>Cancel</button>
         </form>
+        </div>
     );
 };
 

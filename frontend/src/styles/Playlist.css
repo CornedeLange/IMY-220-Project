@@ -68,6 +68,10 @@
     margin-right: 20px;
 }
 
+.playlist-info-and-edit button{
+    margin-top: 8px;
+}
+
 .playlist-page-container button:hover {
     background-color: #fcc35a;
     color: black;
@@ -77,13 +81,14 @@
     margin-top: 20px;
     /* width: 20%; */
     flex: 1;
-    
+    /* background-color: #2f4f7f; */
 
 }
 
 .comment-container{
     max-height: 625px;
     overflow-y: auto;
+    background-color: #2f4f7f;
 }
 
 .playlist-page-comment-container h2 {
@@ -188,6 +193,9 @@
     /* make two child divs display closer to eachother */
     /* margin-right: 20px; */
     /* align-items: start; */
+    /* justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px; */
 }
 
 .playlist-image-and-info{
@@ -195,7 +203,13 @@
     flex-direction: column;
     margin-right: 5px;
     /* width: 100%; */
+    /* gap: 10px; */
     flex: 2;
+}
+
+.playlist-image-and-info h2{
+    font-size: 1.8em;
+
 }
 
 .basic-playlist-buttons{
@@ -205,10 +219,12 @@
     /* margin-left: 20px; */
     margin-right: 20px;
     /* width: fit-content; */
-    flex: 1;
+    flex: 2;
+    margin-bottom: 20px;
 }
 
 .hashtags-playlist{
     margin: 5px;
     color: rgb(52, 153, 221);
+    font-size: 24px;
 }

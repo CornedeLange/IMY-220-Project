@@ -22,7 +22,7 @@ class Splash extends React.Component{
 
     handleSignupComplete =() => {
         this.setState({
-            clickedSignup: false
+            clickedSignup: false, clickedLogin: true
         });
     }
 

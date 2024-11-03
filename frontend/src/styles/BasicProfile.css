@@ -1,6 +1,7 @@
 .basic-profile-container {
     width: 100%;
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
+    background-color: #2f4f7f;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -26,13 +27,15 @@
 
 .profile-header h3 {
     margin: 10px 0;
-    font-size: 24px;
-    color: #333;
+    font-size: 29px;
+    /* color: #333; */
+    color: white;
 }
 
 .profile-header p {
     margin: 5px 0;
-    color: #666;
+    /* color: #666; */
+    color: white;
 }
 
 .profile-header button {
@@ -57,17 +60,24 @@
     border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
     font-size: 22px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    padding: 10px;
 }
 
 .more-user-info h3 {
-    font-size: 20px;
+    font-size: 24px;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
 }
 
 .more-user-info p {
-    margin: 5px 0;
+    margin: 10px 0;
     color: #666;
+    line-height: 1.6;
 }
 
 .friends-list {

@@ -11,7 +11,8 @@ class SignUp extends React.Component{
             errors:{
                 username: "",
                 password: "",
-                email: ""
+                email: "",
+                form: ""
             }  
         };
         //bind methods
@@ -75,17 +76,22 @@ class SignUp extends React.Component{
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data === "User registered") {
+                    if (data.message === "User registered") {
                         // Redirect to login page
                         // window.location.href = '/splash';
                         this.props.onSignupComplete();
                     } else {
-                        console.error(data);
+                        //console.error(data);
+                        this.setState({errors: {...errors, form: data.message}});
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error =>{
+                    //console.error('Error:', error);
+                    this.setState({errors: {...errors, form: "An error occurred during signup, please try again."}});
+                } );
             } catch (error) {
                 console.error("Error", error);
+                this.setState({errors: {...errors, form: "An error occurred during signup, please try again"}});
             }
         } else {
             console.log("Form has errors.");
@@ -99,16 +105,17 @@ class SignUp extends React.Component{
             <div className="signup-form">
                 <h2>Sign Up</h2>
                 <form>
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">Username:</label>
                     <input type="text" id="username" name="username" value={this.state.username} onChange={this.handleChange} />
                     {errors.username && <span className="error">{errors.username}</span>}
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Password:</label>
                     <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     {errors.password && <span className="error">{errors.password}</span>}
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Email:</label>
                     <input type="email" id="email" name="email" value={this.state.email} onChange={this.handleChange} />
                     {errors.email && <span className="error">{errors.email}</span>}
                     <button type="submit" onClick={this.handleSubmit}>Sign Up</button>
+                    {errors.form && <span className="error">{errors.form}</span>}
                     <p style={{color: 'blue', fontWeight: 'bold', marginTop: '10px'}}>Note: Please login in after signing up!</p>
                 </form>
             </div>

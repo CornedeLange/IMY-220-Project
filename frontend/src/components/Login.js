@@ -10,7 +10,8 @@ class Login extends React.Component{
             password: "",
             errors:{
                 username: "",
-                password: ""
+                password: "",
+                form: ""
             }
         };
         //bind the methods
@@ -71,6 +72,8 @@ class Login extends React.Component{
                         //this.props.history.push("/");
                     } else {
                         console.error(data.message);
+                        // errors.password = "Invalid username or password";
+                        this.setState({ errors: { ...errors, form: "Invalid username or password" } });
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -97,6 +100,7 @@ class Login extends React.Component{
                     <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     {errors.password && <span className="error">{errors.password}</span>}
                     <button type="submit">Login</button>
+                    {errors.form && <span className="error">{errors.form}</span>}
                 </form>
             </div>
 
