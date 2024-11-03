@@ -13,6 +13,12 @@ Username: tester
 
 Password: test1234 
 
+*OR*
+
+Username: johnDoe
+
+Password: password123
+
 **SONGS TO TEST ADD:**
 
 Name: What Would Pluto Do
@@ -27,6 +33,7 @@ Name: Champagne Poetry
 Artist: Drake 
 
 Link: https://open.spotify.com/track/2HSmyk2qMN8WQjuGhaQgCk?si=564259fa5cce418b
+
 
 
 
