@@ -42,7 +42,8 @@
 
   .explore-container {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
+    /* background-color: #ffe6cc; */
     margin: 0;
     padding: 0;
 }
@@ -51,7 +52,8 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color: #ffe6cc;
 }
 
 .explore-content h1, .explore-content h2 {
@@ -71,6 +73,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fff;
+    /* background-color: #2f4f7f; */
 }
 
 .explore-playlist-grid, .explore-profile-grid {
@@ -81,17 +84,20 @@
 .explore-playlist-grid{
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: 3.25%;
+  background-color: #2f4f7f;
  
 }
 
 .explore-profile-grid{
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-gap: 3.25%;
+    background-color: #2f4f7f;
 }
 
 .explore-songs-grid {
     grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
     /* background-color: #2f4f7f; */
+    background-color: #2f4f7f;
 }
 
 .explore-section h2 {

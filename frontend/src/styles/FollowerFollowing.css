@@ -4,7 +4,8 @@
     width: 100%;
     padding: 15px;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
+    /* background-color: #2f4f7f; */
     max-height: 680px;
     overflow-y: auto;
 }
@@ -16,8 +17,9 @@
     width: 100%;
     padding: 10px;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
+    background-color: #2f4f7f;
     max-height: 680px;
-    overflow-y: auto;
+    /* overflow-y: auto; */
     /* margin: 10px; */
 }

@@ -22,7 +22,7 @@ class FollowerFollowing extends React.Component{
                         />
                     ))
                 ) : (
-                    <p>No to display</p>
+                    <p>No friends to display</p>
                 )}
             </div>
         </div>
