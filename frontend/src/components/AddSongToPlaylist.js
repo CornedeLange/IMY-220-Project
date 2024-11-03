@@ -113,7 +113,7 @@ class AddSongToPlayList extends React.Component{
                     <label htmlFor="name">Name:</label>
                     <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange} required />
                     {errors.name && <span className="error">{errors.name}</span>}
-                    <label htmlFor="author">Artist:</label>
+                    <label htmlFor="artist">Artist:</label>
                     <input type="text" id="artist" name="artist" value={this.state.artist} onChange={this.handleChange} required />
                     {errors.artist && <span className="error">{errors.artist}</span>}
                     <label htmlFor="link">Link:</label>
